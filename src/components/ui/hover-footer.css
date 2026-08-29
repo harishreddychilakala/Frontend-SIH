@@ -1,0 +1,300 @@
+/* ============================================================
+   BIS SmartAI — Hover Footer Dedicated Styles
+   ============================================================ */
+
+.hover-footer {
+  position: relative;
+  background: #0A0F1F;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  overflow: hidden;
+  margin: 40px 0 24px 0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 25px rgba(59, 130, 246, 0.1);
+  width: 100%;
+}
+
+.hover-footer__bg-gradient {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(125% 125% at 50% 10%, rgba(15, 23, 46, 0.6) 40%, rgba(59, 130, 246, 0.12) 100%);
+}
+
+.hover-footer__container {
+  position: relative;
+  z-index: 10;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 36px 28px 36px;
+}
+
+/* 4-Column Grid */
+.hover-footer__grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr 1.1fr;
+  gap: 36px;
+  padding-bottom: 32px;
+}
+
+@media (max-width: 960px) {
+  .hover-footer__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+}
+
+@media (max-width: 580px) {
+  .hover-footer__grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+/* Brand Column */
+.hover-footer__brand-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.hover-footer__logo-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hover-footer__logo-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  color: #38BDF8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hover-footer__brand-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: -0.3px;
+}
+
+.hover-footer__brand-accent {
+  color: #38BDF8;
+}
+
+.hover-footer__tagline {
+  font-size: 12px;
+  color: #94A3B8;
+  line-height: 1.6;
+  max-width: 320px;
+}
+
+.hover-footer__status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #34D399;
+  width: fit-content;
+}
+
+/* Column Titles */
+.hover-footer__col {
+  display: flex;
+  flex-direction: column;
+}
+
+.hover-footer__col-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #FFFFFF;
+  margin-bottom: 16px;
+}
+
+/* Links */
+.hover-footer__links-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hover-footer__link-item {
+  position: relative;
+}
+
+.hover-footer__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #94A3B8;
+  text-decoration: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.hover-footer__link:hover {
+  color: #38BDF8;
+  transform: translateX(2px);
+}
+
+.hover-footer__ext-icon {
+  opacity: 0.7;
+}
+
+.hover-footer__pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #38BDF8;
+  box-shadow: 0 0 6px #38BDF8;
+  animation: footerPulse 1.8s infinite;
+  display: inline-block;
+  margin-left: 4px;
+}
+
+@keyframes footerPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+/* Contact List */
+.hover-footer__contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hover-footer__contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.hover-footer__contact-icon-wrap {
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.hover-footer__contact-icon {
+  color: #38BDF8;
+}
+
+.hover-footer__contact-link,
+.hover-footer__contact-text {
+  font-size: 12px;
+  color: #94A3B8;
+  line-height: 1.5;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.hover-footer__contact-link:hover {
+  color: #38BDF8;
+}
+
+/* Divider */
+.hover-footer__divider {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin: 16px 0 20px 0;
+}
+
+/* Bottom Bar */
+.hover-footer__bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.hover-footer__social-links {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.hover-footer__social-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #94A3B8;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.hover-footer__social-btn:hover {
+  color: #38BDF8;
+}
+
+.hover-footer__copyright {
+  font-size: 11px;
+  color: #64748B;
+}
+
+/* Text Hover Effect SVG Banner */
+.hover-footer__text-effect-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 140px;
+  margin-top: -30px;
+  margin-bottom: -10px;
+  overflow: hidden;
+  position: relative;
+  z-index: 5;
+  pointer-events: auto;
+}
+
+.hover-footer__svg {
+  width: 100%;
+  max-width: 650px;
+  height: 100%;
+  cursor: pointer;
+}
+
+.hover-footer__svg-base {
+  fill: transparent;
+  stroke: #1E293B;
+  font-family: var(--font-sans, system-ui, sans-serif);
+  font-size: 42px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.hover-footer__svg-animated {
+  fill: transparent;
+  stroke: #38BDF8;
+  stroke-width: 0.35;
+  font-family: var(--font-sans, system-ui, sans-serif);
+  font-size: 42px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.hover-footer__svg-gradient {
+  fill: transparent;
+  font-family: var(--font-sans, system-ui, sans-serif);
+  font-size: 42px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}

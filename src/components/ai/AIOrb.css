@@ -1,0 +1,204 @@
+/* AI Orb Component Styles */
+
+.ai-orb {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--orb-size);
+  height: var(--orb-size);
+  flex-shrink: 0;
+}
+
+/* Rings */
+.ai-orb__ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(59, 130, 246, 0.15);
+}
+
+.ai-orb__ring--1 {
+  width: 70%;
+  height: 70%;
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
+.ai-orb__ring--2 {
+  width: 85%;
+  height: 85%;
+  border-color: rgba(59, 130, 246, 0.12);
+}
+
+.ai-orb__ring--3 {
+  width: 100%;
+  height: 100%;
+  border-color: rgba(34, 211, 238, 0.08);
+}
+
+.ai-orb--animated .ai-orb__ring--1 {
+  animation: orbRingPulse 3s ease-in-out infinite;
+}
+
+.ai-orb--animated .ai-orb__ring--2 {
+  animation: orbRingPulse 3s ease-in-out infinite 0.5s;
+}
+
+.ai-orb--animated .ai-orb__ring--3 {
+  animation: orbRingPulse 3s ease-in-out infinite 1s;
+}
+
+/* Glow */
+.ai-orb__glow {
+  position: absolute;
+  width: 60%;
+  height: 60%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(99, 102, 241, 0.08) 50%, transparent 70%);
+  filter: blur(8px);
+}
+
+.ai-orb--animated .ai-orb__glow {
+  animation: orbPulse 4s ease-in-out infinite;
+}
+
+/* Core */
+.ai-orb__core {
+  position: relative;
+  width: var(--core-size);
+  height: var(--core-size);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #60A5FA 0%, #3B82F6 30%, #6366F1 70%, #1E1B4B 100%);
+  box-shadow:
+    0 0 20px rgba(59, 130, 246, 0.4),
+    0 0 40px rgba(99, 102, 241, 0.2),
+    inset 0 1px 2px rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.ai-orb--animated .ai-orb__core {
+  animation: orbCorePulse 3s ease-in-out infinite;
+}
+
+/* Processing state */
+.ai-orb--processing .ai-orb__core {
+  animation: orbCorePulse 1s ease-in-out infinite;
+  box-shadow:
+    0 0 30px rgba(34, 211, 238, 0.5),
+    0 0 60px rgba(59, 130, 246, 0.3),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2);
+}
+
+/* Inner */
+.ai-orb__inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 60% 40%, rgba(255,255,255,0.08) 0%, transparent 60%);
+}
+
+/* Particles */
+.ai-orb__particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.ai-orb__particle--1 {
+  width: 20%;
+  height: 20%;
+  top: 20%;
+  left: 25%;
+  filter: blur(1px);
+}
+
+.ai-orb__particle--2 {
+  width: 10%;
+  height: 10%;
+  top: 40%;
+  right: 20%;
+  filter: blur(0.5px);
+}
+
+.ai-orb__particle--3 {
+  width: 6%;
+  height: 6%;
+  bottom: 25%;
+  left: 35%;
+}
+
+.ai-orb--animated .ai-orb__particle--1 {
+  animation: particleFloat1 4s ease-in-out infinite;
+}
+
+.ai-orb--animated .ai-orb__particle--2 {
+  animation: particleFloat2 3s ease-in-out infinite 1s;
+}
+
+.ai-orb--animated .ai-orb__particle--3 {
+  animation: particleFloat3 5s ease-in-out infinite 0.5s;
+}
+
+/* Processing dots */
+.ai-orb__dots {
+  position: absolute;
+  bottom: -24px;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.ai-orb__dots span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--blue);
+  animation: dotBounce 0.8s ease-in-out infinite;
+}
+
+.ai-orb__dots span:nth-child(2) { animation-delay: 0.15s; }
+.ai-orb__dots span:nth-child(3) { animation-delay: 0.3s; }
+
+/* Keyframes */
+@keyframes orbRingPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.03); }
+}
+
+@keyframes orbPulse {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+@keyframes orbCorePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+@keyframes particleFloat1 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+  33% { transform: translate(3px, -4px) scale(1.1); opacity: 0.9; }
+  66% { transform: translate(-2px, 2px) scale(0.9); opacity: 0.7; }
+}
+
+@keyframes particleFloat2 {
+  0%, 100% { transform: translate(0, 0); opacity: 0.5; }
+  50% { transform: translate(-3px, -3px); opacity: 0.9; }
+}
+
+@keyframes particleFloat3 {
+  0%, 100% { transform: translate(0, 0); opacity: 0.4; }
+  50% { transform: translate(2px, -2px); opacity: 0.8; }
+}
+
+@keyframes dotBounce {
+  0%, 100% { transform: translateY(0); opacity: 0.4; }
+  50% { transform: translateY(-5px); opacity: 1; }
+}
+
+/* Size variants */
+.ai-orb--sm .ai-orb__glow { filter: blur(4px); }
+.ai-orb--xl .ai-orb__glow { filter: blur(16px); }

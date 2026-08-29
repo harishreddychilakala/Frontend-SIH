@@ -1,0 +1,110 @@
+/* ============================================================
+   BIS SmartAI — Dock Navigation
+   ============================================================ */
+
+/* Outer wrapper — provides the animated height container */
+.bis-dock__outer {
+  display: flex;
+  align-items: flex-end;
+  overflow-x: auto;
+  overflow-y: visible;
+  scrollbar-width: none;
+  max-width: 100%;
+}
+
+.bis-dock__outer::-webkit-scrollbar {
+  display: none;
+}
+
+/* The floating dock panel */
+.bis-dock__panel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 20px;
+  border-radius: 22px;
+  background: rgba(0, 0, 0, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow:
+    0 -1px 0 rgba(255, 255, 255, 0.06) inset,
+    0 8px 40px rgba(0, 0, 0, 0.9),
+    0 0 0 1px rgba(59, 130, 246, 0.08);
+  white-space: nowrap;
+  overflow: visible;
+  position: relative;
+}
+
+/* Individual dock item */
+.bis-dock__item {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: var(--radius-lg, 14px);
+  transition: background 0.15s ease;
+  flex-shrink: 0;
+  outline: none;
+}
+
+.bis-dock__item:focus-visible {
+  outline: 2px solid rgba(59, 130, 246, 0.6);
+  outline-offset: 2px;
+}
+
+/* Icon container */
+.bis-dock__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+/* Icon inner element — the circle bg + icon */
+.bis-dock__icon-inner {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+  color: rgba(148, 163, 184, 0.65);
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+.bis-dock__item:hover .bis-dock__icon-inner {
+  color: #ffffff;
+  transform: scale(1.05);
+}
+
+.bis-dock__item--active .bis-dock__icon-inner {
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: #60A5FA;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.25);
+}
+
+/* Tooltip label (appears above on hover via Framer Motion) */
+.bis-dock__label {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  white-space: nowrap;
+  padding: 5px 10px;
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 12px;
+  font-weight: 600;
+  color: #F8FAFC;
+  pointer-events: none;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}

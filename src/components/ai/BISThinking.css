@@ -1,0 +1,365 @@
+/* ============================================================
+   BIS AI Thinking UI — Premium Glassmorphism Design
+   ============================================================ */
+
+/* ─── Container ────────────────────────────────────────────── */
+.bis-thinking {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  padding: 20px 22px 16px;
+  border-radius: 18px;
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 46, 0.92) 0%,
+    rgba(10, 15, 31, 0.96) 100%
+  );
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  box-shadow:
+    0 0 0 1px rgba(6, 182, 212, 0.06),
+    0 8px 32px rgba(0, 0, 0, 0.55),
+    0 0 60px rgba(99, 102, 241, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  overflow: hidden;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* ─── Ambient Glow ─────────────────────────────────────────── */
+.bis-thinking__glow {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(
+    circle,
+    rgba(99, 102, 241, 0.18) 0%,
+    rgba(6, 182, 212, 0.08) 50%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── Header ───────────────────────────────────────────────── */
+.bis-thinking__header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.bis-thinking__title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* ─── Brand Row ────────────────────────────────────────────── */
+.bis-thinking__brand {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.bis-thinking__brand-name {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(90deg, #60A5FA, #6366F1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bis-thinking__brand-ai {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(90deg, #06B6D4, #3B82F6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bis-thinking__brand-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #34D399;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+/* ─── Subtitle / Shining Text ──────────────────────────────── */
+.bis-thinking__subtitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bis-shining-text {
+  background: linear-gradient(
+    110deg,
+    #64748B 20%,
+    #E2E8F0 38%,
+    #94A3B8 46%,
+    #60A5FA 54%,
+    #94A3B8 62%,
+    #64748B 80%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+}
+
+/* ─── Animated Dots ────────────────────────────────────────── */
+.bis-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.bis-dots__dot {
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #60A5FA, #6366F1);
+}
+
+/* ─── Orb ──────────────────────────────────────────────────── */
+.bis-thinking__orb {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bis-orb__ring {
+  position: absolute;
+  border-radius: 50%;
+  border-style: solid;
+  border-color: transparent;
+}
+
+.bis-orb__ring--3 {
+  inset: 0;
+  border-width: 1px;
+  border-top-color: rgba(99, 102, 241, 0.3);
+  border-right-color: rgba(6, 182, 212, 0.15);
+}
+
+.bis-orb__ring--2 {
+  inset: 6px;
+  border-width: 1px;
+  border-top-color: rgba(6, 182, 212, 0.5);
+  border-left-color: rgba(99, 102, 241, 0.25);
+}
+
+.bis-orb__ring--1 {
+  inset: 12px;
+  border-width: 1.5px;
+  border-top-color: #60A5FA;
+  border-right-color: rgba(99, 102, 241, 0.4);
+}
+
+.bis-orb__core {
+  position: relative;
+  z-index: 1;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(99, 102, 241, 0.2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 0 12px rgba(59, 130, 246, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.bis-neural-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* ─── Divider ──────────────────────────────────────────────── */
+.bis-thinking__divider {
+  position: relative;
+  z-index: 1;
+  margin: 16px 0 14px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.bis-thinking__divider-line {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(99, 102, 241, 0.3) 30%,
+    rgba(6, 182, 212, 0.4) 60%,
+    transparent 100%
+  );
+  transform-origin: left;
+}
+
+/* ─── Steps ────────────────────────────────────────────────── */
+.bis-thinking__steps {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bis-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.bis-step__indicator {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+
+.bis-step__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(100, 116, 139, 0.4);
+  border: 1px solid rgba(100, 116, 139, 0.3);
+}
+
+.bis-step__pulse {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #60A5FA, #6366F1);
+  box-shadow: 0 0 8px rgba(99, 102, 241, 0.6);
+}
+
+.bis-step__check {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #10B981, #059669);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+}
+
+.bis-step__check svg {
+  width: 9px;
+  height: 9px;
+}
+
+.bis-step__content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bis-step__label {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #94A3B8;
+  transition: color 0.2s ease;
+  line-height: 1.4;
+}
+
+.bis-step--active .bis-step__label {
+  color: #E2E8F0;
+  font-weight: 600;
+}
+
+.bis-step--complete .bis-step__label {
+  color: #34D399;
+}
+
+.bis-step__detail {
+  font-size: 0.7rem;
+  color: #60A5FA;
+  font-style: italic;
+  letter-spacing: 0.1px;
+}
+
+/* ─── Footer ───────────────────────────────────────────────── */
+.bis-thinking__footer {
+  position: relative;
+  z-index: 1;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Token Counter */
+.bis-token-counter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bis-token-counter__label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #475569;
+}
+
+.bis-token-counter__value {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #60A5FA;
+  background: rgba(59, 130, 246, 0.1);
+  padding: 2px 7px;
+  border-radius: 5px;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+/* Model Tag */
+.bis-thinking__model-tag {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #64748B;
+  letter-spacing: 0.2px;
+}
+
+.bis-thinking__model-icon {
+  width: 12px;
+  height: 12px;
+  color: #6366F1;
+}

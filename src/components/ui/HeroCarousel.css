@@ -1,0 +1,230 @@
+/* HeroCarousel — BIS SmartAI themed styles */
+
+.hero-carousel {
+  position: relative;
+  height: 100%;
+  min-height: 24rem;
+  width: 100%;
+  overflow: hidden;
+  background: #000;
+  color: #fff;
+  user-select: none;
+  outline: none;
+}
+
+.hero-carousel:focus-visible {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+}
+
+/* Background layer */
+.hero-carousel__bg {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-carousel__bg-img {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.hero-carousel__color-layer {
+  position: absolute;
+  inset: 0;
+  opacity: 1;
+}
+
+.hero-carousel__multiply-layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0.55;
+}
+
+/* Gradient wash */
+.hero-carousel__gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 50%, rgba(0,0,0,0.45) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Film grain */
+.hero-carousel__grain {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.22;
+  mix-blend-mode: overlay;
+  background-size: 180px 180px;
+  z-index: 2;
+}
+
+/* Top bar */
+.hero-carousel__topbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  font-family: inherit;
+}
+
+.hero-carousel__topbar-btn {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.9);
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: opacity 0.2s;
+  padding: 4px 8px;
+}
+
+.hero-carousel__topbar-btn:hover {
+  opacity: 1;
+}
+
+.hero-carousel__brand {
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+/* Headline block */
+.hero-carousel__headline-block {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  z-index: 10;
+}
+
+.hero-carousel__headline-inner {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px 6vw;
+}
+
+.hero-carousel__title {
+  font-weight: 600;
+  line-height: 0.88;
+  letter-spacing: -0.03em;
+  color: #fff;
+  margin: 0;
+}
+
+.hero-carousel__title-line {
+  display: block;
+  overflow: hidden;
+}
+
+.hero-carousel__title-line-inner {
+  display: block;
+}
+
+.hero-carousel__credit {
+  font-family: monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  opacity: 0.8;
+  margin: 0;
+  color: #fff;
+}
+
+.hero-carousel__meta {
+  margin-left: auto;
+  display: flex;
+  align-items: flex-end;
+}
+
+.hero-carousel__meta-fact {
+  font-family: monospace;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  opacity: 0.8;
+  color: #fff;
+}
+
+/* Strip */
+.hero-carousel__strip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.hero-carousel__track {
+  display: flex;
+  align-items: flex-start;
+}
+
+/* Individual cards in the strip */
+.hero-carousel__card {
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 0;
+  background: rgba(255,255,255,0.05);
+  border: none;
+  padding: 0;
+  cursor: inherit;
+}
+
+.hero-carousel__card-img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  display: block;
+  user-select: none;
+  pointer-events: none;
+}
+
+.hero-carousel__card-dimmer {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  pointer-events: none;
+}
+
+/* Progress rail */
+.hero-carousel__rail {
+  position: absolute;
+  z-index: 10;
+}
+
+.hero-carousel__rail-counts {
+  display: flex;
+  justify-content: space-between;
+  font-family: monospace;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.8;
+  color: #fff;
+}
+
+.hero-carousel__rail-track {
+  position: relative;
+  margin-top: 8px;
+  height: 1px;
+  width: 100%;
+  background: rgba(255,255,255,0.25);
+}
+
+.hero-carousel__rail-thumb {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: #fff;
+}

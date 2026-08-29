@@ -1,0 +1,47 @@
+/* ============================================================
+   BIS SmartAI — DockNav Fixed Positioning
+   ============================================================ */
+
+.dock-nav {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 500;
+  /* Prevent the fixed container from causing page horizontal scroll */
+  max-width: calc(100vw - 32px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: none; /* Let clicks pass through the container... */
+}
+
+/* ...but intercept on the actual dock panel */
+.dock-nav .bis-dock__outer,
+.dock-nav .bis-dock__panel {
+  pointer-events: auto;
+}
+
+/* Mobile: Allow dock itself to scroll, not the page */
+@media (max-width: 768px) {
+  .dock-nav {
+    bottom: 12px;
+    left: 16px;
+    right: 16px;
+    transform: none;
+    max-width: none;
+    justify-content: flex-start;
+  }
+
+  .dock-nav .bis-dock__outer {
+    width: 100%;
+    overflow-x: auto;
+    justify-content: flex-start;
+  }
+
+  .dock-nav .bis-dock__panel {
+    border-radius: 18px;
+    padding: 0 12px;
+    gap: 4px;
+  }
+}

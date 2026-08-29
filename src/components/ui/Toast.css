@@ -1,0 +1,4 @@
+.toast-icon--success { color: var(--success); }
+.toast-icon--error { color: var(--error); }
+.toast-icon--warning { color: var(--warning); }
+.toast-icon--info { color: var(--blue-light); }

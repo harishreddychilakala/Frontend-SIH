@@ -1,0 +1,481 @@
+/* Enhanced Hero Showcase & BIS Standard Motion Showcase Styles */
+
+.hero-reveal-container {
+  width: 100%;
+  background-color: #060913;
+  color: #f1f5f9;
+  font-family: inherit;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Intro Section */
+.hero-reveal-intro {
+  width: 100%;
+  padding: 5rem 1.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: radial-gradient(circle at 50% 100%, rgba(56, 189, 248, 0.12) 0%, rgba(6, 9, 19, 0) 70%);
+  position: relative;
+  z-index: 10;
+}
+
+.hero-reveal-intro-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1.1rem;
+  border-radius: 9999px;
+  font-size: 0.825rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: rgba(56, 189, 248, 0.1);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  margin-bottom: 1.5rem;
+  box-shadow: 0 0 25px rgba(56, 189, 248, 0.2);
+}
+
+.hero-reveal-intro-title {
+  font-size: clamp(2rem, 4.5vw, 3.8rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+  color: #ffffff;
+  max-width: 950px;
+  margin: 0 auto 1.25rem;
+}
+
+.hero-reveal-highlight {
+  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-reveal-subtext {
+  font-size: clamp(1rem, 1.35vw, 1.2rem);
+  color: #94a3b8;
+  max-width: 760px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Category Filter Tags */
+.hero-reveal-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  max-width: 1000px;
+  margin: 2rem auto 1rem;
+  padding: 0 1rem;
+}
+
+.hero-reveal-tag-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  user-select: none;
+}
+
+.hero-reveal-tag-pill:hover {
+  transform: translateY(-2px);
+  color: #ffffff;
+  border-color: rgba(56, 189, 248, 0.4);
+  background: rgba(30, 41, 59, 0.9);
+}
+
+.hero-reveal-tag-pill--active {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(99, 102, 241, 0.25) 100%);
+  color: #ffffff;
+  border-color: #38bdf8;
+  box-shadow: 0 0 25px rgba(56, 189, 248, 0.35);
+  transform: translateY(-2px);
+}
+
+/* Cinema Stage Container */
+.hero-reveal-stage-section {
+  position: relative;
+  width: 100%;
+  max-width: 1350px;
+  margin: 2rem auto 4rem;
+  padding: 0 1.5rem;
+}
+
+.hero-reveal-stage-card {
+  position: relative;
+  width: 100%;
+  height: clamp(520px, 72vh, 760px);
+  border-radius: 2rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 30px 100px -20px rgba(0, 0, 0, 0.9), 0 0 60px rgba(56, 189, 248, 0.1);
+  background-color: #0b1120;
+}
+
+/* Media Elements & Ken Burns Animation */
+.hero-reveal-media-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-reveal-media-layer--active {
+  opacity: 1;
+  transform: scale(1);
+  z-index: 2;
+}
+
+.hero-reveal-media-layer--inactive {
+  opacity: 0;
+  transform: scale(1.06);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero-reveal-media-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: subtleZoom 20s infinite alternate ease-in-out;
+}
+
+.hero-reveal-media-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@keyframes subtleZoom {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.08); }
+}
+
+/* Vignette Gradients */
+.hero-reveal-vignette-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 45%;
+  background: linear-gradient(180deg, rgba(6, 9, 19, 0.9) 0%, rgba(6, 9, 19, 0.4) 50%, transparent 100%);
+  pointer-events: none;
+  z-index: 5;
+}
+
+.hero-reveal-vignette-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 65%;
+  background: linear-gradient(0deg, rgba(6, 9, 19, 0.95) 0%, rgba(6, 9, 19, 0.7) 40%, transparent 100%);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Stage Header Info (Top Left of Card) */
+.hero-reveal-stage-header {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  z-index: 20;
+}
+
+.hero-reveal-scheme-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.1rem;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+  font-size: 0.825rem;
+  font-weight: 700;
+  color: #ffffff;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.hero-reveal-status-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  background: rgba(16, 185, 129, 0.15);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #34d399;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Media Controls (Top Right of Card) */
+.hero-reveal-stage-controls {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  z-index: 20;
+}
+
+.hero-reveal-ctrl-btn {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s ease;
+}
+
+.hero-reveal-ctrl-btn:hover {
+  background: rgba(56, 189, 248, 0.25);
+  border-color: #38bdf8;
+  color: #38bdf8;
+  transform: scale(1.08);
+}
+
+/* Interactive Testing Details HUD (Bottom Left) */
+.hero-reveal-hud-card {
+  position: absolute;
+  bottom: 6.5rem;
+  left: 2rem;
+  max-width: 520px;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1.5rem;
+  padding: 1.5rem 1.75rem;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 30px rgba(56, 189, 248, 0.15);
+  z-index: 20;
+  transition: all 0.3s ease;
+}
+
+.hero-reveal-hud-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  margin-bottom: 0.35rem;
+}
+
+.hero-reveal-hud-category {
+  font-size: 0.875rem;
+  color: #94a3b8;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.hero-reveal-hud-clauses-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.85rem 1rem;
+  background: rgba(2, 6, 23, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.hero-reveal-hud-clause-label {
+  font-size: 0.725rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #38bdf8;
+  margin-bottom: 0.15rem;
+}
+
+.hero-reveal-hud-clause-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: #e2e8f0;
+}
+
+.hero-reveal-hud-clause-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background-color: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
+  flex-shrink: 0;
+}
+
+.hero-reveal-hud-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.775rem;
+  color: #64748b;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 0.75rem;
+}
+
+/* Bottom Thumbnail Strip */
+.hero-reveal-thumb-strip {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 2rem;
+  right: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+  z-index: 20;
+}
+
+.hero-reveal-thumb-strip::-webkit-scrollbar {
+  height: 4px;
+}
+
+.hero-reveal-thumb-strip::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
+}
+
+.hero-reveal-thumb-card {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.4rem 0.85rem 0.4rem 0.4rem;
+  border-radius: 9999px;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+
+.hero-reveal-thumb-card:hover {
+  background: rgba(30, 41, 59, 0.95);
+  border-color: rgba(56, 189, 248, 0.4);
+  transform: translateY(-2px);
+}
+
+.hero-reveal-thumb-card--active {
+  background: rgba(15, 23, 42, 0.95);
+  border-color: #38bdf8;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+  transform: translateY(-2px);
+}
+
+.hero-reveal-thumb-img {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hero-reveal-thumb-title {
+  font-size: 0.775rem;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+/* Floating Live Radar Telemetry (Bottom Right of Card) */
+.hero-reveal-telemetry-box {
+  position: absolute;
+  bottom: 6.5rem;
+  right: 2rem;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1.25rem;
+  padding: 1.15rem 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  z-index: 20;
+}
+
+.hero-reveal-telemetry-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  font-size: 0.8rem;
+}
+
+.hero-reveal-telemetry-label {
+  color: #94a3b8;
+}
+
+.hero-reveal-telemetry-val {
+  color: #38bdf8;
+  font-weight: 700;
+  font-family: monospace;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 900px) {
+  .hero-reveal-telemetry-box {
+    display: none;
+  }
+  .hero-reveal-hud-card {
+    max-width: calc(100% - 4rem);
+    bottom: 5.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-reveal-stage-header {
+    top: 1rem;
+    left: 1rem;
+  }
+  .hero-reveal-stage-controls {
+    top: 1rem;
+    right: 1rem;
+  }
+  .hero-reveal-hud-card {
+    left: 1rem;
+    right: 1rem;
+    bottom: 5rem;
+    max-width: calc(100% - 2rem);
+    padding: 1.15rem;
+  }
+  .hero-reveal-thumb-strip {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+  }
+}
