@@ -153,7 +153,7 @@ export default function Assistant() {
 
   // Initial load + query params
   useEffect(() => {
-    loadConversations().then((convs) => {
+    loadConversations().then(() => {
       const q = searchParams.get('q');
       const convParam = searchParams.get('conv');
       if (convParam) {
@@ -161,12 +161,13 @@ export default function Assistant() {
       } else if (q) {
         setInput(q);
         setTimeout(() => handleSend(q), 50);
-      } else if (convs.length > 0) {
-        selectConversation(convs[0].id);
+      } else {
+        // Default to a fresh, new conversation
+        createConversation();
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [searchParams]);
 
   // Command palette detection
   useEffect(() => {
