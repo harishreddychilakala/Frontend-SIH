@@ -5,6 +5,7 @@ import {
   ChevronRight, Star, CheckCircle, ExternalLink, Sparkles,
   Award, Layers, GitCompare, Building, ArrowUpRight, Cpu, Play
 } from 'lucide-react';
+import { useApp } from '../context/AppContext.jsx';
 import HoverFooter from '../components/ui/hover-footer.jsx';
 import { CoverflowCarousel } from '../components/ui/CoverflowCarousel.jsx';
 import { HeroParallax, BIS_PRODUCTS } from '../components/ui/hero-parallax.jsx';
@@ -165,14 +166,27 @@ const BIS_SLIDES = [
 
 export default function Landing() {
   const [heroSearch, setHeroSearch] = useState('');
+  const { isAuthenticated } = useApp();
   const navigate = useNavigate();
+
+  const handleProtectedNavigate = (targetPath) => {
+    if (isAuthenticated) {
+      navigate(targetPath);
+    } else {
+      navigate('/login');
+    }
+  };
 
   const handleHeroSearch = (e) => {
     e.preventDefault();
-    if (heroSearch.trim()) {
-      navigate(`/assistant?q=${encodeURIComponent(heroSearch.trim())}`);
+    if (isAuthenticated) {
+      if (heroSearch.trim()) {
+        navigate(`/assistant?q=${encodeURIComponent(heroSearch.trim())}`);
+      } else {
+        navigate('/assistant');
+      }
     } else {
-      navigate('/assistant');
+      navigate('/login');
     }
   };
 
@@ -191,20 +205,58 @@ export default function Landing() {
           </Link>
 
           <nav className="landing__nav-links">
-            <Link to="/standards">Standards Explorer</Link>
-            <Link to="/compliance">Compliance Checker</Link>
-            <Link to="/compare">Compare</Link>
-            <Link to="/services">BIS Schemes</Link>
-            <Link to="/laboratories">Testing Labs</Link>
+            <button
+              type="button"
+              className="landing__nav-link-btn"
+              onClick={() => handleProtectedNavigate('/standards')}
+            >
+              Standards Explorer
+            </button>
+            <button
+              type="button"
+              className="landing__nav-link-btn"
+              onClick={() => handleProtectedNavigate('/compliance')}
+            >
+              Compliance Checker
+            </button>
+            <button
+              type="button"
+              className="landing__nav-link-btn"
+              onClick={() => handleProtectedNavigate('/compare')}
+            >
+              Compare
+            </button>
+            <button
+              type="button"
+              className="landing__nav-link-btn"
+              onClick={() => handleProtectedNavigate('/services')}
+            >
+              BIS Schemes
+            </button>
+            <button
+              type="button"
+              className="landing__nav-link-btn"
+              onClick={() => handleProtectedNavigate('/laboratories')}
+            >
+              Testing Labs
+            </button>
           </nav>
 
           <div className="landing__nav-actions">
-            <Link to="/login" className="btn btn-ghost btn-sm">
-              Sign In
-            </Link>
-            <Link to="/dashboard" className="btn btn-primary btn-sm">
-              Launch App <ArrowRight size={13} />
-            </Link>
+            {isAuthenticated ? (
+              <Link to="/dashboard" className="btn btn-primary btn-sm">
+                Dashboard <ArrowRight size={13} />
+              </Link>
+            ) : (
+              <>
+                <Link to="/login" className="btn btn-ghost btn-sm">
+                  Sign In
+                </Link>
+                <Link to="/login" className="btn btn-primary btn-sm">
+                  Launch App <ArrowRight size={13} />
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </header>
@@ -268,7 +320,7 @@ export default function Landing() {
           <div className="landing__showcase-cta">
             <button
               className="btn btn-secondary"
-              onClick={() => navigate('/standards')}
+              onClick={() => handleProtectedNavigate('/standards')}
             >
               Browse All 20,000+ Indian Standards <ArrowRight size={14} />
             </button>
@@ -294,7 +346,7 @@ export default function Landing() {
                 <div
                   key={i}
                   className={`landing__cap-card card card-hover landing__cap-card--${cap.color}`}
-                  onClick={() => navigate(cap.link)}
+                  onClick={() => handleProtectedNavigate(cap.link)}
                 >
                   <div className={`landing__cap-icon-box landing__cap-icon-box--${cap.color}`}>
                     <Icon size={24} />

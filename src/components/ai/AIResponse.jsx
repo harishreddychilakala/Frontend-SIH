@@ -150,6 +150,7 @@ export default function AIResponse({ answer }) {
   const qco = answer.qco;
   const testing = answer.testing;
   const certification = answer.certification;
+  const precautions = answer.consumer_precautions || answer.precautions || [];
   const sources = answer.sources || [];
   const verificationStatus = answer.verification_status || standard?.verification_status || 'needs_verification';
 
@@ -393,6 +394,27 @@ export default function AIResponse({ answer }) {
             ) : (
               <p className="ai-response__card-text">{certification}</p>
             )}
+          </div>
+        )}
+
+        {/* Consumer & Buyer Safety Precautions */}
+        {precautions && precautions.length > 0 && (
+          <div className="ai-response__card ai-response__card--precautions">
+            <div className="ai-response__card-header">
+              <Shield size={14} className="text-cyan" />
+              <span>Consumer &amp; Buyer Safety Precautions</span>
+            </div>
+            <ul className="ai-response__list">
+              {precautions.map((p, i) => {
+                const text = typeof p === 'string' ? p : p.text;
+                return (
+                  <li key={i} className="ai-response__list-item">
+                    <CheckCircle size={13} className="text-cyan flex-shrink-0" />
+                    <span>{renderInlineMarkdown(text)}</span>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         )}
       </div>

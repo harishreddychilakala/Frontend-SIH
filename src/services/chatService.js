@@ -40,11 +40,13 @@ export const chatService = {
   },
 
   /**
-   * Start new conversation with first prompt
+   * Start new conversation with first prompt and optional photo attachment
    * POST /api/chat
    */
-  async createConversation(prompt, title = null) {
-    const conv = await apiClient.post('/api/chat', { content: prompt, title });
+  async createConversation(prompt, title = null, language = 'en', imageData = null) {
+    const payload = { content: prompt, title, language };
+    if (imageData) payload.image_data = imageData;
+    const conv = await apiClient.post('/api/chat', payload);
     return {
       id: conv.id,
       title: conv.title,
@@ -63,11 +65,13 @@ export const chatService = {
   },
 
   /**
-   * Send message in existing conversation
+   * Send message in existing conversation with optional photo attachment
    * POST /api/chat/{conversation_id}/messages
    */
-  async sendMessage(conversationId, content) {
-    const message = await apiClient.post(`/api/chat/${conversationId}/messages`, { content });
+  async sendMessage(conversationId, content, language = 'en', imageData = null) {
+    const payload = { content, language };
+    if (imageData) payload.image_data = imageData;
+    const message = await apiClient.post(`/api/chat/${conversationId}/messages`, payload);
     return {
       id: message.id,
       role: message.role,

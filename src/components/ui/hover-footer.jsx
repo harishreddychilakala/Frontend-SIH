@@ -4,6 +4,8 @@ import {
   Mail, Phone, MapPin, Globe, Shield, Sparkles,
   ExternalLink, Layers, Award, CheckCircle, FileText
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useApp } from '../../context/AppContext.jsx';
 import './hover-footer.css';
 
 export const TextHoverEffect = ({
@@ -137,6 +139,19 @@ export const FooterBackgroundGradient = () => {
 };
 
 export default function HoverFooter() {
+  const { isAuthenticated } = useApp();
+  const navigate = useNavigate();
+
+  const handleFooterLinkClick = (e, link) => {
+    if (link.external) return;
+    e.preventDefault();
+    if (isAuthenticated) {
+      navigate(link.href);
+    } else {
+      navigate('/login');
+    }
+  };
+
   const footerLinks = [
     {
       title: 'Standards & Schemes',
@@ -212,16 +227,26 @@ export default function HoverFooter() {
               <ul className="hover-footer__links-list">
                 {section.links.map((link) => (
                   <li key={link.label} className="hover-footer__link-item">
-                    <a
-                      href={link.href}
-                      target={link.external ? '_blank' : undefined}
-                      rel={link.external ? 'noopener noreferrer' : undefined}
-                      className="hover-footer__link"
-                    >
-                      <span>{link.label}</span>
-                      {link.external && <ExternalLink size={11} className="hover-footer__ext-icon" />}
-                      {link.pulse && <span className="hover-footer__pulse-dot" />}
-                    </a>
+                    {link.external ? (
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover-footer__link"
+                      >
+                        <span>{link.label}</span>
+                        <ExternalLink size={11} className="hover-footer__ext-icon" />
+                      </a>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={(e) => handleFooterLinkClick(e, link)}
+                        className="hover-footer__link hover-footer__link--btn"
+                      >
+                        <span>{link.label}</span>
+                        {link.pulse && <span className="hover-footer__pulse-dot" />}
+                      </button>
+                    )}
                   </li>
                 ))}
               </ul>

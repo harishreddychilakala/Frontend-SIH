@@ -5,8 +5,9 @@ import {
   useTransform,
   useSpring,
 } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight, Shield, Sparkles, Search, CheckCircle } from "lucide-react";
+import { useApp } from "../../context/AppContext.jsx";
 
 // ─── BIS SmartAI Products (Unsplash images) ─────────────────────────────────
 export const BIS_PRODUCTS = [
@@ -104,6 +105,7 @@ export const BIS_PRODUCTS = [
 
 // ─── Hero Header ─────────────────────────────────────────────────────────────
 export const HeroParallaxHeader = ({ heroSearch, setHeroSearch, onSubmit }) => {
+  const { isAuthenticated } = useApp();
   return (
     <div className="parallax-header">
       <div className="parallax-badge">
@@ -155,10 +157,10 @@ export const HeroParallaxHeader = ({ heroSearch, setHeroSearch, onSubmit }) => {
       </div>
 
       <div className="parallax-cta-row">
-        <Link to="/dashboard" className="btn btn-gradient btn-lg">
+        <Link to={isAuthenticated ? "/dashboard" : "/login"} className="btn btn-gradient btn-lg">
           Launch App <ArrowRight size={16} />
         </Link>
-        <Link to="/compliance" className="btn btn-secondary btn-lg">
+        <Link to={isAuthenticated ? "/compliance" : "/login"} className="btn btn-secondary btn-lg">
           Free Compliance Check
         </Link>
       </div>
@@ -173,6 +175,7 @@ export const HeroParallaxHeader = ({ heroSearch, setHeroSearch, onSubmit }) => {
 
 // ─── Product Card ─────────────────────────────────────────────────────────────
 export const ProductCard = ({ product, translate }) => {
+  const { isAuthenticated } = useApp();
   return (
     <motion.div
       style={{ x: translate }}
@@ -180,7 +183,7 @@ export const ProductCard = ({ product, translate }) => {
       key={product.title}
       className="parallax-product-card"
     >
-      <Link to={product.link} className="parallax-product-link">
+      <Link to={isAuthenticated ? product.link : "/login"} className="parallax-product-link">
         <img
           src={product.thumbnail}
           height={600}

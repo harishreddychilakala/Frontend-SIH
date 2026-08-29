@@ -144,6 +144,11 @@
   font-size: 12px;
   color: #94A3B8;
   text-decoration: none;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
   transition: color 0.2s ease, transform 0.2s ease;
 }
 

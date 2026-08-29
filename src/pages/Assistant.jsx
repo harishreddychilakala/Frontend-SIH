@@ -5,7 +5,7 @@ import {
   Send, Paperclip, Search, Plus, Trash2, MessageSquare,
   User as UserIcon, ChevronRight, Shield, ExternalLink,
   Bot, X, Clock, Sparkles, Command, FileText, FlaskConical,
-  Scale, Layers, ArrowUp, Loader2, CheckCircle2
+  Scale, Layers, ArrowUp, Loader2, CheckCircle2, Globe, Camera, Image as ImageIcon
 } from 'lucide-react';
 import { useApp } from '../context/AppContext.jsx';
 import AIOrb from '../components/ai/AIOrb.jsx';
@@ -51,6 +51,12 @@ const COMMAND_SUGGESTIONS = [
     prompt: 'Compare the following two Indian Standards in detail: ',
     icon: Layers,
   },
+];
+
+const LANGUAGES = [
+  { code: 'en', label: 'English', short: 'EN', flag: '🇬🇧' },
+  { code: 'hi', label: 'हिन्दी (Hindi)', short: 'हिं', flag: '🇮🇳' },
+  { code: 'te', label: 'తెలుగు (Telugu)', short: 'తె', flag: '🇮🇳' },
 ];
 
 const SUGGESTED_PROMPTS = [
@@ -106,6 +112,17 @@ export default function Assistant() {
   const [activeSuggestion, setActiveSuggestion] = useState(-1);
   const [attachments, setAttachments] = useState([]);
   const commandPaletteRef = useRef(null);
+
+  // Language selector state
+  const [selectedLanguage, setSelectedLanguage] = useState(() => {
+    return localStorage.getItem('bis_language') || 'en';
+  });
+  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
+  const languageDropdownRef = useRef(null);
+
+  // Photo / Image attachment state
+  const [imageAttachment, setImageAttachment] = useState(null); // { file, name, previewUrl, base64 }
+  const fileInputRef = useRef(null);
 
   // Delete modal state
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, convId: null, title: '' });
@@ -180,11 +197,14 @@ export default function Assistant() {
     }
   }, [input]);
 
-  // Click outside to close command palette
+  // Click outside to close command palette & language dropdown
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (commandPaletteRef.current && !commandPaletteRef.current.contains(e.target)) {
         setShowCommandPalette(false);
+      }
+      if (languageDropdownRef.current && !languageDropdownRef.current.contains(e.target)) {
+        setShowLanguageDropdown(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -268,15 +288,44 @@ export default function Assistant() {
     textareaRef.current?.focus();
   };
 
+  const handleImageSelect = (e) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    if (!f.type.startsWith('image/')) {
+      addToast('Please attach a valid photo or image file (.png, .jpg, .webp)', 'warning');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      setImageAttachment({
+        file: f,
+        name: f.name,
+        previewUrl: ev.target.result,
+        base64: ev.target.result,
+      });
+      addToast(`Attached photo: ${f.name}`, 'info');
+    };
+    reader.readAsDataURL(f);
+    e.target.value = '';
+  };
+
+  const handleAttachFile = () => {
+    fileInputRef.current?.click();
+  };
+
   const handleSend = useCallback(async (overrideInput) => {
     const text = (overrideInput !== undefined ? overrideInput : input).trim();
-    if (!text || loading) return;
+    if ((!text && !imageAttachment) || loading) return;
 
     if (abortRef.current) {
       abortRef.current.abort();
     }
 
+    const currentImg = imageAttachment;
+    const promptText = text || 'Analyze this product photo and determine its mandatory BIS Indian Standards, QCO orders, and testing requirements.';
+
     setInput('');
+    setImageAttachment(null);
     setShowCommandPalette(false);
     adjustHeight(true);
     setLoading(true);
@@ -285,7 +334,8 @@ export default function Assistant() {
     const tempUserMsg = {
       id: tempId,
       role: 'user',
-      content: text,
+      content: promptText,
+      imagePreview: currentImg?.previewUrl || null,
       timestamp: new Date().toISOString(),
     };
 
@@ -295,13 +345,13 @@ export default function Assistant() {
       let finalMessages;
 
       if (!activeConvId) {
-        const conv = await chatService.createConversation(text);
+        const conv = await chatService.createConversation(promptText, null, selectedLanguage, currentImg?.base64 || null);
         finalMessages = conv.messages || [];
         setConversations(prev => [
           {
             id: conv.id,
             title: conv.title,
-            preview: text,
+            preview: promptText,
             timestamp: conv.timestamp,
             category: 'today',
           },
@@ -311,7 +361,7 @@ export default function Assistant() {
         convCacheRef.current[conv.id] = finalMessages;
         setMessages(finalMessages);
       } else {
-        const aiMsg = await chatService.sendMessage(activeConvId, text);
+        const aiMsg = await chatService.sendMessage(activeConvId, promptText, selectedLanguage, currentImg?.base64 || null);
         setMessages(prev => {
           const withoutTemp = prev.filter(m => m.id !== tempId);
           const confirmedUser = { ...tempUserMsg, id: `user-confirmed-${Date.now()}` };
@@ -340,7 +390,7 @@ export default function Assistant() {
       setLoading(false);
       abortRef.current = null;
     }
-  }, [input, loading, activeConvId, addToast, loadConversations, adjustHeight]);
+  }, [input, imageAttachment, loading, activeConvId, selectedLanguage, addToast, loadConversations, adjustHeight]);
 
   const handleKeyDown = (e) => {
     if (showCommandPalette) {
@@ -363,10 +413,6 @@ export default function Assistant() {
       e.preventDefault();
       handleSend();
     }
-  };
-
-  const handleAttachFile = () => {
-    navigate('/documents');
   };
 
   // Filter conversations
@@ -565,6 +611,11 @@ export default function Assistant() {
                 )}
               </div>
               <div className="assistant__message-body">
+                {msg.imagePreview && (
+                  <div className="assistant__chat-img-wrap">
+                    <img src={msg.imagePreview} alt="Attached product" className="assistant__chat-img" />
+                  </div>
+                )}
                 {msg.role === 'assistant' && msg.structured && msg.answer ? (
                   <AIResponse answer={msg.answer} />
                 ) : (
@@ -661,6 +712,41 @@ export default function Assistant() {
             )}
           </AnimatePresence>
 
+          {/* Hidden File Input for Image Attachments */}
+          <input
+            type="file"
+            ref={fileInputRef}
+            accept=".png,.jpg,.jpeg,.webp"
+            hidden
+            onChange={handleImageSelect}
+          />
+
+          {/* Attached Photo Preview Chip */}
+          <AnimatePresence>
+            {imageAttachment && (
+              <motion.div
+                className="assistant__attached-chip card"
+                initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 8, scale: 0.95 }}
+              >
+                <img src={imageAttachment.previewUrl} alt="Preview" className="assistant__chip-thumb" />
+                <div className="assistant__chip-info">
+                  <span className="assistant__chip-name">{imageAttachment.name}</span>
+                  <span className="assistant__chip-hint">Vision AI will identify this product &amp; standards</span>
+                </div>
+                <button
+                  type="button"
+                  className="btn btn-ghost btn-xs assistant__chip-remove"
+                  onClick={() => setImageAttachment(null)}
+                  title="Remove image"
+                >
+                  <X size={13} />
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           {/* Textarea Glass Box */}
           <div className={`assistant__input-box ${loading ? 'assistant__input-box--disabled' : ''}`}>
             <div className="assistant__input-inner">
@@ -705,6 +791,52 @@ export default function Assistant() {
                   <Command size={14} />
                   <span>Commands</span>
                 </button>
+
+                {/* Multilingual Selector */}
+                <div className="assistant__lang-picker-wrap" ref={languageDropdownRef}>
+                  <button
+                    type="button"
+                    className={`assistant__tool-btn btn btn-ghost assistant__lang-btn ${selectedLanguage !== 'en' ? 'assistant__lang-btn--active' : ''}`}
+                    onClick={() => setShowLanguageDropdown(prev => !prev)}
+                    title="Select AI Response Language"
+                    aria-label="Select language"
+                  >
+                    <Globe size={14} />
+                    <span>{LANGUAGES.find(l => l.code === selectedLanguage)?.flag} {LANGUAGES.find(l => l.code === selectedLanguage)?.short}</span>
+                  </button>
+
+                  <AnimatePresence>
+                    {showLanguageDropdown && (
+                      <motion.div
+                        className="assistant__lang-menu card"
+                        initial={{ opacity: 0, y: 6, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 6, scale: 0.95 }}
+                        transition={{ duration: 0.12 }}
+                      >
+                        <div className="assistant__lang-header">
+                          <span className="section-label">Response Language</span>
+                        </div>
+                        {LANGUAGES.map(lang => (
+                          <button
+                            key={lang.code}
+                            type="button"
+                            className={`assistant__lang-option ${selectedLanguage === lang.code ? 'assistant__lang-option--selected' : ''}`}
+                            onClick={() => {
+                              setSelectedLanguage(lang.code);
+                              localStorage.setItem('bis_language', lang.code);
+                              setShowLanguageDropdown(false);
+                            }}
+                          >
+                            <span className="assistant__lang-flag">{lang.flag}</span>
+                            <span className="assistant__lang-name">{lang.label}</span>
+                            {selectedLanguage === lang.code && <CheckCircle2 size={13} className="assistant__lang-check" />}
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
 
               <div className="assistant__input-submit-wrap">

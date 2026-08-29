@@ -70,15 +70,22 @@
   }
 }
 
-.landing__nav-links a {
+.landing__nav-links a,
+.landing__nav-link-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
   color: var(--text-secondary);
   text-decoration: none;
   font-size: var(--text-sm);
   font-weight: 500;
+  font-family: inherit;
   transition: color 0.15s ease;
 }
 
-.landing__nav-links a:hover {
+.landing__nav-links a:hover,
+.landing__nav-link-btn:hover {
   color: var(--blue-light);
 }
 
