@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, MessageSquare, BookOpen, GitCompare,
-  ShieldCheck, Building2, FlaskConical, FileText, Bookmark,
+  ShieldCheck, Building2, FlaskConical, FileText,
   History, Settings, HelpCircle, ChevronLeft, ChevronRight,
   LogOut, User, Zap, X
 } from 'lucide-react';
@@ -35,7 +35,6 @@ const navSections = [
     label: 'Workspace',
     items: [
       { to: '/documents', icon: FileText, label: 'Documents' },
-      { to: '/saved', icon: Bookmark, label: 'Saved Standards' },
       { to: '/history', icon: History, label: 'Chat History' },
     ],
   },

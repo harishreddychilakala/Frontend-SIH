@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, MessageSquare, BookOpen, GitCompare,
-  ShieldCheck, Building2, FlaskConical, FileText, Bookmark,
+  ShieldCheck, Building2, FlaskConical, FileText,
   History, Settings,
 } from 'lucide-react';
 import { Dock, DockItem, DockIcon, DockLabel } from '../ui/Dock.jsx';
@@ -17,7 +17,6 @@ const NAV_ITEMS = [
   { to: '/services',     icon: Building2,       label: 'BIS Services' },
   { to: '/laboratories', icon: FlaskConical,    label: 'Laboratories' },
   { to: '/documents',    icon: FileText,        label: 'Documents' },
-  { to: '/saved',        icon: Bookmark,        label: 'Saved Standards' },
   { to: '/history',      icon: History,         label: 'Chat History' },
   { to: '/settings',     icon: Settings,        label: 'Settings' },
 ];

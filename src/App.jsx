@@ -21,7 +21,6 @@ import Documents from './pages/Documents.jsx';
 import Compare from './pages/Compare.jsx';
 import Services from './pages/Services.jsx';
 import Laboratories from './pages/Laboratories.jsx';
-import Saved from './pages/Saved.jsx';
 import History from './pages/History.jsx';
 import Profile from './pages/Profile.jsx';
 import Settings from './pages/Settings.jsx';
@@ -46,7 +45,6 @@ const router = createBrowserRouter([
       { path: '/compare', element: <Compare /> },
       { path: '/services', element: <Services /> },
       { path: '/laboratories', element: <Laboratories /> },
-      { path: '/saved', element: <Saved /> },
       { path: '/history', element: <History /> },
       { path: '/profile', element: <Profile /> },
       { path: '/settings', element: <Settings /> },

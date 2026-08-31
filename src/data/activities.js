@@ -42,12 +42,12 @@ export const mockActivities = [
   },
   {
     id: 'act-005',
-    type: 'saved',
-    title: 'Standard Saved',
-    description: 'IS 1890 Portland Cement added to saved standards',
+    type: 'standard-view',
+    title: 'IS 1890 Portland Cement',
+    description: 'Explored IS 1890 specification and requirements',
     timestamp: new Date(Date.now() - 1000 * 60 * 60 * 8).toISOString(),
-    icon: 'bookmark',
-    link: '/saved',
+    icon: 'file-text',
+    link: '/standards/IS-1890',
   },
   {
     id: 'act-006',

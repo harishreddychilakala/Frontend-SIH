@@ -2,12 +2,11 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   MessageSquare, BookOpen, ShieldCheck, FlaskConical,
-  Send, Sparkles, Bookmark, Clock,
+  Send, Sparkles, Clock,
   ArrowRight, CheckCircle, FileText,
 } from 'lucide-react';
 import { useApp } from '../context/AppContext.jsx';
 import chatService from '../services/chatService.js';
-import savedService from '../services/savedService.js';
 import complianceService from '../services/complianceService.js';
 import HoverFooter from '../components/ui/hover-footer.jsx';
 import './Dashboard.css';
@@ -56,8 +55,8 @@ const QUICK_ACTIONS = [
 
 const ACTIVITY_ICONS = {
   'ai-query': MessageSquare,
-  'saved': Bookmark,
   'compliance-check': ShieldCheck,
+  'document': FileText,
 };
 
 function formatRelative(ts) {
@@ -76,7 +75,6 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
   const [stats, setStats] = useState({
-    savedStandards: 0,
     complianceChecks: 0,
     aiConversations: 0,
   });
@@ -86,24 +84,21 @@ export default function Dashboard() {
   useEffect(() => {
     async function loadDashboardData() {
       try {
-        const [convs, saved, reports] = await Promise.allSettled([
+        const [convs, reports] = await Promise.allSettled([
           chatService.getConversations(),
-          savedService.getSavedStandards(),
           complianceService.getComplianceReports(),
         ]);
 
         const convList = convs.status === 'fulfilled' ? convs.value : [];
-        const savedList = saved.status === 'fulfilled' ? saved.value : [];
         const reportList = reports.status === 'fulfilled' ? reports.value : [];
 
         setStats({
-          savedStandards: savedList.length,
           complianceChecks: reportList.length,
           aiConversations: convList.length,
         });
 
         const acts = [];
-        convList.slice(0, 3).forEach(c => {
+        convList.slice(0, 4).forEach(c => {
           acts.push({
             id: `act-conv-${c.id}`,
             type: 'ai-query',
@@ -113,17 +108,7 @@ export default function Dashboard() {
             link: '/assistant',
           });
         });
-        savedList.slice(0, 2).forEach(s => {
-          acts.push({
-            id: `act-saved-${s.id}`,
-            type: 'saved',
-            title: s.standard_reference || 'Standard',
-            description: s.title || 'Saved Standard',
-            timestamp: s.created_at,
-            link: '/saved',
-          });
-        });
-        reportList.slice(0, 2).forEach(r => {
+        reportList.slice(0, 3).forEach(r => {
           acts.push({
             id: `act-comp-${r.id}`,
             type: 'compliance-check',
@@ -229,23 +214,21 @@ export default function Dashboard() {
           <div className="db__metric-label">Indian Standards</div>
         </div>
 
-        {/* Saved — dynamic */}
+        {/* Testing Laboratories — static/curated */}
         <div
           className="db__metric-card db__metric-card--indigo"
-          onClick={() => navigate('/saved')}
+          onClick={() => navigate('/laboratories')}
           role="button"
           tabIndex={0}
-          onKeyDown={e => e.key === 'Enter' && navigate('/saved')}
-          aria-label="Saved standards"
-          id="metric-saved"
+          onKeyDown={e => e.key === 'Enter' && navigate('/laboratories')}
+          aria-label="Testing laboratories"
+          id="metric-labs"
         >
           <div className="db__metric-icon-wrap db__metric-icon-wrap--indigo">
-            <Bookmark size={16} />
+            <FlaskConical size={16} />
           </div>
-          <div className="db__metric-value">
-            {loading ? <span className="db__metric-skeleton" /> : stats.savedStandards}
-          </div>
-          <div className="db__metric-label">Saved Standards</div>
+          <div className="db__metric-value">1,200+</div>
+          <div className="db__metric-label">Testing Labs</div>
         </div>
 
         {/* Compliance — dynamic */}
