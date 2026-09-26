@@ -5,7 +5,8 @@ import {
   Send, Paperclip, Search, Plus, Trash2, MessageSquare,
   User as UserIcon, ChevronRight, Shield, ExternalLink,
   Bot, X, Clock, Sparkles, Command, FileText, FlaskConical,
-  Scale, Layers, ArrowUp, Loader2, CheckCircle2, Globe, Camera, Image as ImageIcon
+  Scale, Layers, ArrowUp, Loader2, CheckCircle2, Globe, Camera, Image as ImageIcon,
+  Award
 } from 'lucide-react';
 import { useApp } from '../context/AppContext.jsx';
 import AIOrb from '../components/ai/AIOrb.jsx';
@@ -16,6 +17,27 @@ import chatService from '../services/chatService.js';
 import './Assistant.css';
 
 const COMMAND_SUGGESTIONS = [
+  {
+    prefix: '/hallmark',
+    label: 'Hallmarking & HUID Guide',
+    description: 'Gold (IS 1417) & Silver (IS 2112) purity, 3-sign hallmark & 6-digit HUID verification',
+    prompt: 'Explain the BIS Hallmarking system for gold/silver jewellery, the 3-sign hallmark, and how to verify 6-digit HUID on the BIS Care App for: ',
+    icon: Award,
+  },
+  {
+    prefix: '/verify',
+    label: 'Verify ISI / Licence',
+    description: 'How to verify CM/L licence numbers and genuine ISI marks on BIS Care App',
+    prompt: 'How can a consumer verify whether an ISI mark, CM/L licence number, or CRS registration is genuine using the BIS Care App and Manakonline portal for: ',
+    icon: CheckCircle2,
+  },
+  {
+    prefix: '/consumer',
+    label: 'Consumer Rights & Fake Marks',
+    description: 'Reporting counterfeit marks, filing grievances, and consumer protection channels',
+    prompt: 'What steps should a consumer take if a product has a fake/misleading ISI mark, and how can they file a complaint on BIS Care App or National Consumer Helpline (1915)? Product: ',
+    icon: Shield,
+  },
   {
     prefix: '/qco',
     label: 'QCO Mandates',
@@ -60,10 +82,12 @@ const LANGUAGES = [
 ];
 
 const SUGGESTED_PROMPTS = [
-  { icon: '⚡', label: 'Electric Kettles (IS 302-2-15)', query: 'Which BIS standard and testing clauses apply to electric kettles?' },
-  { icon: '🏗️', label: 'Steel TMT Rebars QCO', query: 'What are the mandatory QCO requirements for steel TMT bars under IS 1786?' },
-  { icon: '📜', label: 'Scheme I vs Scheme II CRS', query: 'Explain the difference between BIS Scheme I (ISI Mark) and Scheme II (CRS).' },
-  { icon: '🔋', label: 'Lithium Battery Safety', query: 'What are the safety and drop test requirements for lithium batteries under IS 16046?' },
+  { icon: '✨', label: 'Gold Hallmarking & 6-Digit HUID', query: 'How does gold hallmarking work under IS 1417, what are the 3 mandatory hallmark signs, and how do I verify HUID on the BIS Care App?' },
+  { icon: '🔍', label: 'How to Verify Genuine ISI Mark & CM/L', query: 'How can a consumer check whether a product is genuine BIS certified and verify its 7 or 8-digit CM/L licence number?' },
+  { icon: '🚨', label: 'Report Fake ISI Mark / Complaint', query: 'What should a consumer do if they find a product with a fake or counterfeit ISI mark, and how do they lodge a grievance with BIS and National Consumer Helpline (1915)?' },
+  { icon: '⚡', label: 'Electric Kettles & Appliances (IS 302-2-15)', query: 'Which BIS standard and safety testing clauses apply to electric kettles?' },
+  { icon: '🏗️', label: 'Steel TMT Rebars Mandatory QCO', query: 'What are the mandatory QCO requirements and chemical limits for steel TMT bars under IS 1786?' },
+  { icon: '📜', label: 'ISI Mark vs CRS vs Hallmarking', query: 'Explain the difference between BIS Product Certification (ISI Mark), Compulsory Registration (CRS), and Precious Metals Hallmarking.' },
 ];
 
 function formatTime(ts) {

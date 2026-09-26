@@ -204,3 +204,112 @@
   margin-top: 16px;
   flex-wrap: wrap;
 }
+
+/* Hallmarking & Consumer Guide Cards */
+.services__hallmark-guide {
+  padding: 20px 24px;
+  background: var(--bg-card);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.08);
+}
+
+[data-theme="light"] .services__hallmark-guide {
+  background: linear-gradient(135deg, #ffffff 0%, #fffbf0 100%);
+  border-color: #FDE68A;
+}
+
+.services__consumer-guide {
+  padding: 20px 24px;
+  background: var(--bg-card);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.08);
+}
+
+[data-theme="light"] .services__consumer-guide {
+  background: linear-gradient(135deg, #ffffff 0%, #f5f3ff 100%);
+  border-color: #DDD6FE;
+}
+
+.services__hallmark-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.services__hallmark-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.services__hallmark-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background: rgba(245, 158, 11, 0.12);
+  flex-shrink: 0;
+}
+
+.services__hallmark-label {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--text-primary);
+  display: block;
+  margin-bottom: 2px;
+}
+
+.services__hallmark-desc {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.services__consumer-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.services__consumer-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.services__consumer-step-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(99, 102, 241, 0.15);
+  color: var(--indigo-light);
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.services__guide-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}

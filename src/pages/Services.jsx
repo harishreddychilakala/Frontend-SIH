@@ -213,6 +213,134 @@ export default function Services() {
         </div>
       </div>
 
+      {/* Specialized Hallmarking Interactive Guide (Shown when Hallmarking selected or searched) */}
+      {(selectedCat === 'Hallmarking' || searchQuery.toLowerCase().includes('hallmark') || searchQuery.toLowerCase().includes('gold') || searchQuery.toLowerCase().includes('huid')) && (
+        <div className="card services__hallmark-guide animate-fade-in mb-6">
+          <div className="services__guide-header">
+            <div className="flex items-center gap-2">
+              <span className="badge badge-warning flex items-center gap-1">
+                <Award size={12} /> Gold &amp; Silver Hallmarking (IS 1417 / IS 2112)
+              </span>
+              <span className="verified-badge">
+                <Shield size={10} /> Statutory Purity Mandate
+              </span>
+            </div>
+            <h2 className="text-base font-bold text-primary mt-2">
+              The 3 Mandatory Hallmark Signs on Certified Gold Jewellery
+            </h2>
+            <p className="text-xs text-secondary mt-1">
+              In India, hallmarked gold jewellery must bear all 3 distinct laser-engraved marks. Look for these before purchasing:
+            </p>
+          </div>
+
+          <div className="services__hallmark-grid mt-4">
+            <div className="services__hallmark-item">
+              <div className="services__hallmark-icon-wrap">
+                <Shield size={20} className="text-warning" />
+              </div>
+              <div className="services__hallmark-info">
+                <span className="services__hallmark-label">1. BIS Triangular Logo</span>
+                <p className="services__hallmark-desc">Authentic triangular mark of the Bureau of Indian Standards certifying sovereign conformity.</p>
+              </div>
+            </div>
+
+            <div className="services__hallmark-item">
+              <div className="services__hallmark-icon-wrap">
+                <Award size={20} className="text-blue-light" />
+              </div>
+              <div className="services__hallmark-info">
+                <span className="services__hallmark-label">2. Purity / Fineness Grade</span>
+                <p className="services__hallmark-desc">Karat &amp; fineness: <strong>22K916</strong> (91.6%), <strong>18K750</strong> (75%), <strong>14K585</strong> (58.5%), <strong>24K995</strong> (99.5%).</p>
+              </div>
+            </div>
+
+            <div className="services__hallmark-item">
+              <div className="services__hallmark-icon-wrap">
+                <Sparkles size={20} className="text-cyan" />
+              </div>
+              <div className="services__hallmark-info">
+                <span className="services__hallmark-label">3. 6-Digit Alphanumeric HUID</span>
+                <p className="services__hallmark-desc">Unique Hallmark Unique Identification (e.g., <code>AB12CD</code>) laser engraved at recognized AHC center.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="services__guide-footer mt-4">
+            <div className="text-xs text-secondary flex items-center gap-1.5">
+              <CheckCircle size={14} className="text-success flex-shrink-0" />
+              <span>Verify any 6-digit HUID in real-time using the official <strong>BIS Care Mobile App</strong>.</span>
+            </div>
+            <button
+              className="btn btn-primary btn-sm flex-shrink-0"
+              onClick={() => navigate('/assistant?q=Explain step-by-step how to verify 6-digit gold HUID and check jeweller details on the BIS Care App')}
+            >
+              <Sparkles size={13} /> Ask AI: Verify HUID Guide
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Specialized Consumer Protection & Verification Guide (Shown when Consumer Services selected or searched) */}
+      {(selectedCat === 'Consumer Services' || searchQuery.toLowerCase().includes('consumer') || searchQuery.toLowerCase().includes('isi') || searchQuery.toLowerCase().includes('fake') || searchQuery.toLowerCase().includes('verify')) && (
+        <div className="card services__consumer-guide animate-fade-in mb-6">
+          <div className="services__guide-header">
+            <div className="flex items-center gap-2">
+              <span className="badge badge-indigo flex items-center gap-1">
+                <Shield size={12} /> Consumer Verification &amp; Rights
+              </span>
+              <span className="verified-badge">
+                <CheckCircle size={10} /> Official BIS Care Portal
+              </span>
+            </div>
+            <h2 className="text-base font-bold text-primary mt-2">
+              How Consumers Can Identify Genuine BIS Products &amp; Report Counterfeits
+            </h2>
+            <p className="text-xs text-secondary mt-1">
+              Protect yourself from substandard and falsely labelled goods using official BIS citizen services:
+            </p>
+          </div>
+
+          <div className="services__consumer-steps-grid mt-4">
+            <div className="services__consumer-step">
+              <div className="services__consumer-step-badge">1</div>
+              <div>
+                <h4 className="text-xs font-bold text-primary">Check Genuine ISI Mark Anatomy</h4>
+                <p className="text-xs text-secondary mt-0.5">A genuine ISI mark always has the <strong>IS Number</strong> above the mark and a 7 or 8-digit <strong>CM/L Licence Number</strong> directly below it.</p>
+              </div>
+            </div>
+
+            <div className="services__consumer-step">
+              <div className="services__consumer-step-badge">2</div>
+              <div>
+                <h4 className="text-xs font-bold text-primary">Instant Verification on BIS Care App</h4>
+                <p className="text-xs text-secondary mt-0.5">Use <em>&apos;Verify Licence Details&apos;</em> for ISI items, <em>&apos;Verify R-Number&apos;</em> for electronics, and <em>&apos;Verify HUID&apos;</em> for gold jewellery.</p>
+              </div>
+            </div>
+
+            <div className="services__consumer-step">
+              <div className="services__consumer-step-badge">3</div>
+              <div>
+                <h4 className="text-xs font-bold text-primary">File Grievances &amp; Report Fake Marks</h4>
+                <p className="text-xs text-secondary mt-0.5">Report fake marks on the BIS Care App &apos;Complaints&apos; tab or call the National Consumer Helpline (NCH) at <strong>1915</strong>.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="services__guide-footer mt-4">
+            <div className="text-xs text-secondary flex items-center gap-1.5">
+              <Shield size={14} className="text-blue-light flex-shrink-0" />
+              <span>Section 29 of the BIS Act, 2016 prescribes strict penalties for misuse of the Standard Mark.</span>
+            </div>
+            <button
+              className="btn btn-secondary btn-sm flex-shrink-0"
+              onClick={() => navigate('/assistant?q=What should I do if a product has a fake ISI mark or is not certified under mandatory QCO?')}
+            >
+              <Sparkles size={13} /> Ask AI: Fake Mark Action Plan
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Services List */}
       <div className="services__list">
         {loading ? (

@@ -7,8 +7,9 @@ export const serviceCategories = [
   'All Categories',
   'Certification',
   'Registration',
-  'Laboratories',
   'Hallmarking',
+  'Consumer Services',
+  'Laboratories',
   'Management Systems',
 ];
 
