@@ -182,12 +182,13 @@ export default function HoverFooter() {
     },
     {
       icon: <Phone size={16} className="hover-footer__contact-icon" />,
-      text: '+91 11 2323 0131 (BIS Helpdesk)',
-      href: 'tel:+911123230131',
+      text: '+91 8978144691',
+      href: 'tel:+918978144691',
     },
     {
       icon: <MapPin size={16} className="hover-footer__contact-icon" />,
-      text: 'Manak Bhavan, 9 Bahadur Shah Zafar Marg, New Delhi 110002',
+      text: 'KL University, Vijayawada, Andhra Pradesh',
+      href: 'https://maps.google.com/?q=KL+University+Vijayawada',
     },
   ];
 
