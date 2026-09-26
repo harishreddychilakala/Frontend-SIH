@@ -52,8 +52,12 @@ class ApiClient {
       // Handle 401 Unauthorized — auto cleanup expired token
       if (response.status === 401) {
         localStorage.removeItem(AUTH_KEY);
-        // Dispatch custom auth state event if needed
-        window.dispatchEvent(new Event('auth:unauthorized'));
+        // Dispatch custom auth state event with detail message
+        window.dispatchEvent(
+          new CustomEvent('auth:unauthorized', {
+            detail: { message: 'Your session has expired. Please log in again.' },
+          })
+        );
       }
 
       // Handle 204 No Content

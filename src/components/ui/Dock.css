@@ -108,3 +108,34 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
   z-index: 9999;
 }
+
+/* ── Light Mode Styles ────────────────────────────────────────── */
+[data-theme="light"] .bis-dock__panel {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .bis-dock__icon-inner {
+  color: #64748B;
+}
+
+[data-theme="light"] .bis-dock__item:hover .bis-dock__icon-inner {
+  color: #0F172A;
+  background: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .bis-dock__item--active .bis-dock__icon-inner {
+  background: rgba(37, 99, 235, 0.12);
+  border: 1px solid rgba(37, 99, 235, 0.25);
+  color: #2563EB;
+  box-shadow: 0 2px 10px rgba(37, 99, 235, 0.18);
+}
+
+[data-theme="light"] .bis-dock__label {
+  background: #0F172A;
+  color: #FFFFFF;
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+}

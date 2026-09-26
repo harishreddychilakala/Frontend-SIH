@@ -9,17 +9,17 @@
    CSS Custom Properties — Professional Design Tokens
    ============================================================ */
 :root {
-  /* Pure Black Theme */
-  --bg-primary: #000000;
-  --bg-secondary: #030304;
-  --bg-card: #070709;
-  --bg-elevated: #0d0d10;
-  --bg-hover: #12121a;
+  /* Ultra-Clear High-Contrast Dark Theme */
+  --bg-primary: #080c17;
+  --bg-secondary: #0d1527;
+  --bg-card: #121c32;
+  --bg-elevated: #1a2846;
+  --bg-hover: #22355c;
 
-  /* Borders — hair-thin on pure black */
-  --border: rgba(255, 255, 255, 0.06);
-  --border-light: rgba(255, 255, 255, 0.03);
-  --border-hover: rgba(59, 130, 246, 0.45);
+  /* Borders — sharp and beautifully defined */
+  --border: rgba(255, 255, 255, 0.15);
+  --border-light: rgba(255, 255, 255, 0.1);
+  --border-hover: rgba(59, 130, 246, 0.65);
   --border-focus: #38BDF8;
 
   /* Brand Colors & Sapphire Accents */
@@ -33,19 +33,19 @@
 
   /* Status Colors */
   --success: #10B981;
-  --success-bg: rgba(16, 185, 129, 0.12);
+  --success-bg: rgba(16, 185, 129, 0.18);
   --warning: #F59E0B;
-  --warning-bg: rgba(245, 158, 11, 0.12);
+  --warning-bg: rgba(245, 158, 11, 0.18);
   --error: #EF4444;
-  --error-bg: rgba(239, 68, 68, 0.12);
+  --error-bg: rgba(239, 68, 68, 0.18);
   --info: #3B82F6;
-  --info-bg: rgba(59, 130, 246, 0.12);
+  --info-bg: rgba(59, 130, 246, 0.18);
 
-  /* Text Colors */
-  --text-primary: #F8FAFC;
-  --text-secondary: #94A3B8;
-  --text-muted: #64748B;
-  --text-disabled: #475569;
+  /* Text Colors — Ultra Sharp Contrast */
+  --text-primary: #FFFFFF;
+  --text-secondary: #E2E8F0;
+  --text-muted: #94A3B8;
+  --text-disabled: #64748B;
 
   /* Gradients */
   --gradient-blue: linear-gradient(135deg, #2563EB 0%, #4F46E5 100%);
@@ -105,18 +105,22 @@
 /* Light Theme Variables */
 [data-theme="light"] {
   --bg-primary: #F8FAFC;
-  --bg-secondary: #F1F5F9;
+  --bg-secondary: #FFFFFF;
   --bg-card: #FFFFFF;
-  --bg-elevated: #F8FAFC;
+  --bg-elevated: #F1F5F9;
   --bg-hover: #E2E8F0;
   --border: #E2E8F0;
   --border-light: #F1F5F9;
+  --border-hover: rgba(37, 99, 235, 0.45);
+  --border-focus: #2563EB;
   --text-primary: #0F172A;
-  --text-secondary: #475569;
-  --text-muted: #94A3B8;
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --text-secondary: #334155;
+  --text-muted: #64748B;
+  --text-disabled: #94A3B8;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.03);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
 }
 
 /* Base resets */
@@ -126,6 +130,12 @@
   padding: 0;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+[data-theme="light"] *,
+[data-theme="light"] *::before,
+[data-theme="light"] *::after {
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
 }
 
 /* Global Sleek Dark Scrollbars */
@@ -147,6 +157,14 @@
   background: rgba(255, 255, 255, 0.3);
 }
 
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
 body {
   font-family: var(--font-sans);
   background-color: var(--bg-primary);
@@ -156,24 +174,26 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  transition: background-color var(--transition-base), color var(--transition-base);
 }
 
-/* Professional Card — pure black canvas */
+/* Professional Card */
 .card {
-  background: rgba(255, 255, 255, 0.028);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-  transition: border-color var(--transition-base), box-shadow var(--transition-base), transform var(--transition-base);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base), transform var(--transition-base), background-color var(--transition-base);
 }
 
 .card:hover {
-  border-color: rgba(59, 130, 246, 0.35);
+  border-color: var(--border-hover);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35), 0 0 15px rgba(59, 130, 246, 0.1);
 }
 
 .card-hover:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(59, 130, 246, 0.15);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(59, 130, 246, 0.25);
 }
 
 /* Professional Badges */
@@ -327,32 +347,131 @@ body {
 }
 
 /* Form Controls */
+select,
+input,
+textarea,
+.form-input,
+.form-select {
+  color-scheme: dark;
+}
+
+[data-theme="light"] select,
+[data-theme="light"] input,
+[data-theme="light"] textarea,
+[data-theme="light"] .form-input,
+[data-theme="light"] .form-select {
+  color-scheme: light;
+}
+
 .form-input {
   width: 100%;
   padding: 10px 14px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: #090d16;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius-md);
-  color: var(--text-primary);
+  color: #F8FAFC;
   font-family: var(--font-sans);
   font-size: var(--text-sm);
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
   outline: none;
+}
+
+.form-input::placeholder {
+  color: #64748B;
+  opacity: 1;
 }
 
 .form-input:focus {
   border-color: var(--border-focus);
-  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
-  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+  background: #0d1322;
+}
+
+.form-input:disabled {
+  background: rgba(255, 255, 255, 0.03);
+  color: #94A3B8;
+  border-color: rgba(255, 255, 255, 0.06);
+  cursor: not-allowed;
+  opacity: 0.85;
 }
 
 .form-select {
   cursor: pointer;
+  background-color: #090d16;
+  color: #F8FAFC;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394A3B8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
   background-size: 16px;
   padding-right: 36px;
+}
+
+/* Global Select Options Styling - Fixes Invisible Text Bug */
+select option,
+.form-select option,
+option {
+  background-color: #0c1222 !important;
+  color: #F8FAFC !important;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  padding: 10px 14px;
+}
+
+select option:checked,
+.form-select option:checked,
+option:checked {
+  background-color: #2563EB !important;
+  color: #FFFFFF !important;
+  font-weight: 600;
+}
+
+select option:hover,
+.form-select option:hover,
+option:hover {
+  background-color: #1E293B !important;
+  color: #38BDF8 !important;
+}
+
+/* Light Mode Overrides */
+[data-theme="light"] .form-input {
+  background: #FFFFFF;
+  border-color: #CBD5E1;
+  color: #0F172A;
+}
+
+[data-theme="light"] .form-input::placeholder {
+  color: #94A3B8;
+}
+
+[data-theme="light"] .form-input:focus {
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  background: #FFFFFF;
+}
+
+[data-theme="light"] .form-input:disabled {
+  background: #F1F5F9;
+  color: #64748B;
+  border-color: #E2E8F0;
+}
+
+[data-theme="light"] .form-select {
+  background-color: #FFFFFF;
+  color: #0F172A;
+}
+
+[data-theme="light"] select option,
+[data-theme="light"] .form-select option,
+[data-theme="light"] option {
+  background-color: #FFFFFF !important;
+  color: #0F172A !important;
+}
+
+[data-theme="light"] select option:checked,
+[data-theme="light"] .form-select option:checked,
+[data-theme="light"] option:checked {
+  background-color: #2563EB !important;
+  color: #FFFFFF !important;
 }
 
 .form-label {

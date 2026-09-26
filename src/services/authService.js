@@ -1,11 +1,64 @@
 // ============================================================
 // BIS SmartAI — Auth Service (Connected to FastAPI Backend)
+// Enforces JWT expiration validation and session lifecycle.
 // ============================================================
 import apiClient from './apiClient.js';
 
 const AUTH_KEY = 'bis_smartai_auth';
 
+/**
+ * Safely parse a JWT payload without external dependencies.
+ */
+export function parseJwt(token) {
+  try {
+    if (!token || typeof token !== 'string') return null;
+    const parts = token.split('.');
+    if (parts.length !== 3) return null;
+    const base64Url = parts[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Check whether a JWT token is expired.
+ */
+export function isTokenExpired(token) {
+  if (!token) return true;
+  const decoded = parseJwt(token);
+  if (!decoded || !decoded.exp) return true;
+  const nowInSeconds = Math.floor(Date.now() / 1000);
+  return decoded.exp <= nowInSeconds;
+}
+
 export const authService = {
+  /**
+   * Get valid auth data from localStorage. Automatically cleans up if expired.
+   */
+  getAuthData() {
+    try {
+      const stored = localStorage.getItem(AUTH_KEY);
+      if (!stored) return null;
+      const parsed = JSON.parse(stored);
+      if (!parsed?.token || isTokenExpired(parsed.token)) {
+        localStorage.removeItem(AUTH_KEY);
+        return null;
+      }
+      return parsed;
+    } catch {
+      localStorage.removeItem(AUTH_KEY);
+      return null;
+    }
+  },
+
   /**
    * Login with email and password
    * POST /api/auth/login
@@ -64,8 +117,10 @@ export const authService = {
   async fetchCurrentUser() {
     try {
       const user = await apiClient.get('/api/auth/me');
-      const stored = JSON.parse(localStorage.getItem(AUTH_KEY) || '{}');
-      localStorage.setItem(AUTH_KEY, JSON.stringify({ ...stored, user }));
+      const stored = this.getAuthData() || {};
+      if (user) {
+        localStorage.setItem(AUTH_KEY, JSON.stringify({ ...stored, user }));
+      }
       return user;
     } catch {
       return null;
@@ -73,23 +128,38 @@ export const authService = {
   },
 
   /**
-   * Get cached user from localStorage
+   * Get cached user from localStorage (validates token expiration)
    */
   getCurrentUser() {
-    try {
-      const stored = localStorage.getItem(AUTH_KEY);
-      if (!stored) return null;
-      return JSON.parse(stored).user;
-    } catch {
-      return null;
-    }
+    const authData = this.getAuthData();
+    return authData?.user || null;
   },
 
   /**
-   * Check if authenticated
+   * Get raw JWT token
+   */
+  getToken() {
+    const authData = this.getAuthData();
+    return authData?.token || null;
+  },
+
+  /**
+   * Check if user is currently authenticated with a valid unexpired token
    */
   isAuthenticated() {
     return this.getCurrentUser() !== null;
+  },
+
+  /**
+   * Get remaining seconds before current JWT access token expires
+   */
+  getTokenRemainingSeconds() {
+    const token = this.getToken();
+    if (!token) return 0;
+    const decoded = parseJwt(token);
+    if (!decoded || !decoded.exp) return 0;
+    const remaining = decoded.exp - Math.floor(Date.now() / 1000);
+    return Math.max(0, remaining);
   },
 
   /**
@@ -98,7 +168,7 @@ export const authService = {
    */
   async updateProfile(data) {
     const updatedUser = await apiClient.patch('/api/users/me', data);
-    const stored = JSON.parse(localStorage.getItem(AUTH_KEY) || '{}');
+    const stored = this.getAuthData() || {};
     localStorage.setItem(AUTH_KEY, JSON.stringify({ ...stored, user: updatedUser }));
     return updatedUser;
   },

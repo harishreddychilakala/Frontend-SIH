@@ -97,7 +97,14 @@
 .labs__select {
   height: 42px;
   min-width: 140px;
-  background: var(--bg-secondary);
+  background-color: #090d16;
+  color: var(--text-primary);
+  color-scheme: dark;
+}
+
+.labs__select option {
+  background-color: #0c1222 !important;
+  color: #F8FAFC !important;
 }
 
 .labs__search-btn {

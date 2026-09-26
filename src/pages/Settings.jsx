@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { Sun, Moon, Monitor, Bell, Shield, Eye, Database, User, Key, Trash2, CheckCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Sun, Moon, Monitor, Bell, Shield, Eye, Database, User, Key, Trash2, CheckCircle, LogOut } from 'lucide-react';
 import { useApp } from '../context/AppContext.jsx';
 
 const settingsSections = ['Profile', 'Appearance', 'Notifications', 'AI Preferences', 'Security', 'Data & Privacy'];
 
 export default function Settings() {
   const { theme, setTheme, user, updateUser, logout, addToast } = useApp();
+  const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('Profile');
   const [notifs, setNotifs] = useState({ updates: true, compliance: true, newsletter: false });
   const [aiPrefs, setAiPrefs] = useState({ structured: true, showSources: true, autoSearch: false });
@@ -27,6 +29,16 @@ export default function Settings() {
       addToast('Failed to update profile', 'error');
     } finally {
       setSavingProfile(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      addToast('Logged out successfully', 'info');
+      navigate('/login');
+    } catch (err) {
+      navigate('/login');
     }
   };
 
@@ -235,8 +247,8 @@ export default function Settings() {
                   <div className="text-muted text-xs mt-1">Logged in as: {user?.email}</div>
                   <div className="text-muted text-xs">User ID: {user?.id}</div>
                 </div>
-                <button className="btn btn-danger btn-sm" style={{ width: 'fit-content' }} onClick={logout}>
-                  Sign Out of All Devices
+                <button className="btn btn-danger btn-sm" style={{ width: 'fit-content' }} onClick={handleLogout}>
+                  <LogOut size={14} /> Sign Out of All Devices
                 </button>
               </div>
             </div>

@@ -303,3 +303,94 @@
   font-weight: 900;
   letter-spacing: 2px;
 }
+
+/* ============================================================
+   Hover Footer — Light Mode Theme Overrides
+   ============================================================ */
+[data-theme="light"] .hover-footer {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .hover-footer__bg-gradient {
+  background: radial-gradient(125% 125% at 50% 10%, rgba(241, 245, 249, 0.9) 40%, rgba(37, 99, 235, 0.06) 100%);
+}
+
+[data-theme="light"] .hover-footer__brand-title {
+  color: #0F172A;
+}
+
+[data-theme="light"] .hover-footer__brand-accent {
+  color: #2563EB;
+}
+
+[data-theme="light"] .hover-footer__logo-icon {
+  background: rgba(37, 99, 235, 0.1);
+  border-color: rgba(37, 99, 235, 0.25);
+  color: #2563EB;
+}
+
+[data-theme="light"] .hover-footer__tagline {
+  color: #475569;
+}
+
+[data-theme="light"] .hover-footer__status-badge {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #059669;
+}
+
+[data-theme="light"] .hover-footer__col-title {
+  color: #0F172A;
+}
+
+[data-theme="light"] .hover-footer__link {
+  color: #475569;
+}
+
+[data-theme="light"] .hover-footer__link:hover {
+  color: #2563EB;
+}
+
+[data-theme="light"] .hover-footer__pulse-dot {
+  background: #2563EB;
+  box-shadow: 0 0 6px #2563EB;
+}
+
+[data-theme="light"] .hover-footer__contact-icon {
+  color: #2563EB;
+}
+
+[data-theme="light"] .hover-footer__contact-link,
+[data-theme="light"] .hover-footer__contact-text {
+  color: #475569;
+}
+
+[data-theme="light"] .hover-footer__contact-link:hover {
+  color: #2563EB;
+}
+
+[data-theme="light"] .hover-footer__divider {
+  border-top-color: #E2E8F0;
+}
+
+[data-theme="light"] .hover-footer__social-btn {
+  color: #475569;
+}
+
+[data-theme="light"] .hover-footer__social-btn:hover {
+  color: #2563EB;
+}
+
+[data-theme="light"] .hover-footer__copyright {
+  color: #64748B;
+}
+
+[data-theme="light"] .hover-footer__svg-base {
+  stroke: #CBD5E1;
+}
+
+[data-theme="light"] .hover-footer__svg-animated {
+  stroke: #2563EB;
+}

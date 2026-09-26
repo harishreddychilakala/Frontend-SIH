@@ -283,3 +283,36 @@
   .documents__result-grid { grid-template-columns: 1fr; }
 }
 
+/* ============================================================
+   Documents Analyzer — Light Mode Theme Overrides
+   ============================================================ */
+[data-theme="light"] .documents__drop-zone {
+  background: #FFFFFF;
+  border-color: rgba(37, 99, 235, 0.4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .documents__drop-zone:hover,
+[data-theme="light"] .documents__drop-zone--active {
+  background: #EFF6FF;
+  border-color: #2563EB;
+  box-shadow: 0 0 25px rgba(37, 99, 235, 0.15);
+}
+
+[data-theme="light"] .documents__drop-icon-wrap {
+  background: rgba(37, 99, 235, 0.1);
+  border-color: rgba(37, 99, 235, 0.25);
+  color: #2563EB;
+}
+
+[data-theme="light"] .documents__preview-thumbnail {
+  border-color: #2563EB;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .documents__req-item {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  color: #0F172A;
+}
+

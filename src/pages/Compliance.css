@@ -446,6 +446,11 @@
   padding: 8px;
 }
 
+[data-theme="light"] .compliance__glass-select option {
+  background: #FFFFFF !important;
+  color: #0F172A !important;
+}
+
 .compliance__glass-textarea {
   height: auto;
   min-height: 84px;
@@ -496,3 +501,125 @@
   opacity: 0.8;
   cursor: wait;
 }
+
+/* ============================================================
+   Compliance Checker — Light Mode Theme Overrides
+   ============================================================ */
+[data-theme="light"] .compliance__nav-tabs {
+  background: #F1F5F9;
+  border-color: #E2E8F0;
+}
+
+[data-theme="light"] .compliance__tab-btn {
+  color: #475569;
+}
+
+[data-theme="light"] .compliance__tab-btn:hover {
+  color: #0F172A;
+}
+
+[data-theme="light"] .compliance__glass-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .compliance__hero-glass-card {
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .compliance__hero-title {
+  color: #0F172A;
+}
+
+[data-theme="light"] .compliance__score-circle {
+  background: #F8FAFC;
+  border-color: #2563EB;
+  box-shadow: 0 0 15px rgba(37, 99, 235, 0.2);
+}
+
+[data-theme="light"] .compliance__score-val {
+  color: #2563EB;
+}
+
+[data-theme="light"] .compliance__presets-bar {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+}
+
+[data-theme="light"] .compliance__preset-chip {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+}
+
+[data-theme="light"] .compliance__preset-chip:hover,
+[data-theme="light"] .compliance__preset-chip--active {
+  background: #EFF6FF;
+  border-color: #3B82F6;
+}
+
+[data-theme="light"] .compliance__preset-tag {
+  color: #2563EB;
+  background: rgba(37, 99, 235, 0.1);
+}
+
+[data-theme="light"] .compliance__preset-name {
+  color: #334155;
+}
+
+[data-theme="light"] .compliance__preset-chip:hover .compliance__preset-name,
+[data-theme="light"] .compliance__preset-chip--active .compliance__preset-name {
+  color: #1D4ED8;
+}
+
+[data-theme="light"] .compliance__form-header {
+  border-bottom: 1px solid #E2E8F0;
+}
+
+[data-theme="light"] .compliance__form-title {
+  color: #0F172A;
+}
+
+[data-theme="light"] .compliance__form-desc {
+  color: #475569;
+}
+
+[data-theme="light"] .compliance__field-label {
+  color: #334155;
+}
+
+[data-theme="light"] .compliance__glass-input,
+[data-theme="light"] .compliance__glass-select,
+[data-theme="light"] .compliance__glass-textarea {
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  color: #0F172A;
+}
+
+[data-theme="light"] .compliance__glass-input::placeholder,
+[data-theme="light"] .compliance__glass-textarea::placeholder {
+  color: #94A3B8;
+}
+
+[data-theme="light"] .compliance__glass-input:focus,
+[data-theme="light"] .compliance__glass-select:focus,
+[data-theme="light"] .compliance__glass-textarea:focus {
+  border-color: #2563EB;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  background: #FFFFFF;
+}
+
+[data-theme="light"] .compliance__form-footer {
+  border-top: 1px solid #E2E8F0;
+}
+
+[data-theme="light"] .compliance__breakdown-item,
+[data-theme="light"] .compliance__test-pill,
+[data-theme="light"] .compliance__history-item {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  color: #0F172A;
+}
+

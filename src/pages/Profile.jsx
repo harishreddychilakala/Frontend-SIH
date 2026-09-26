@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { User, Mail, Building2, Briefcase, Edit3, Save, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { User, Mail, Building2, Briefcase, Edit3, Save, X, LogOut } from 'lucide-react';
 import { useApp } from '../context/AppContext.jsx';
 
 export default function Profile() {
-  const { user, updateUser, addToast } = useApp();
+  const { user, updateUser, logout, addToast } = useApp();
+  const navigate = useNavigate();
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState({
     name: user?.name || '',
@@ -26,6 +28,16 @@ export default function Profile() {
       addToast('Failed to update profile', 'error');
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      addToast('Logged out successfully', 'info');
+      navigate('/login');
+    } catch {
+      navigate('/login');
     }
   };
 
@@ -64,7 +76,7 @@ export default function Profile() {
       </div>
 
       {/* Fields */}
-      <div className="card" style={{ padding: '24px' }}>
+      <div className="card" style={{ padding: '24px', marginBottom: '24px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {fields.map(field => (
             <div key={field.key} className="form-group">
@@ -102,7 +114,18 @@ export default function Profile() {
         )}
       </div>
 
-      <div className="demo-notice" style={{ marginTop: '16px' }}>Demo — Profile data is stored locally in Phase 1.</div>
+      {/* Account Session & Sign Out */}
+      <div className="card" style={{ padding: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div>
+          <div style={{ fontSize: 'var(--text-sm)', fontWeight: '600', color: 'var(--text-primary)' }}>Account Session</div>
+          <div style={{ fontSize: 'var(--text-xs)', color: 'var(--text-muted)', marginTop: '2px' }}>
+            Signed in as {user?.email}
+          </div>
+        </div>
+        <button className="btn btn-danger btn-sm" onClick={handleLogout}>
+          <LogOut size={14} /> Sign Out
+        </button>
+      </div>
     </div>
   );
 }
