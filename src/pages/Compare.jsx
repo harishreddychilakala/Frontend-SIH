@@ -21,28 +21,34 @@ const COMPARE_AREAS = [
 
 const COMPARISON_PRESETS = [
   {
-    title: 'Water Heaters: Storage vs Instantaneous',
+    title: 'Water Heaters: Storage (IS 2082) vs Liquid Heating (IS 302-2-15)',
     stdAQuery: 'IS 2082',
     stdBQuery: 'IS 302-2-15',
     category: 'Electrical Appliances',
   },
   {
-    title: 'Steel: TMT Rebars vs Structural Steel',
+    title: 'Steel: TMT Rebars (IS 1786) vs Structural Steel (IS 2062)',
     stdAQuery: 'IS 1786',
     stdBQuery: 'IS 2062',
-    category: 'Steel & Construction',
+    category: 'Steel & Metals',
   },
   {
-    title: 'Electrical: Plugs & Sockets vs General Safety',
-    stdAQuery: 'IS 1293:2019',
+    title: 'Fans vs General Appliances: Ceiling Fans (IS 374) vs IS 302-2-15',
+    stdAQuery: 'IS 374:2019',
     stdBQuery: 'IS 302-2-15',
-    category: 'Electrical Accessories',
+    category: 'Electrical Appliances',
   },
   {
-    title: 'Electronics: IT Safety vs Toy Safety',
-    stdAQuery: 'IS 13252 (Part 1)',
-    stdBQuery: 'IS 9873 (Part 1)',
-    category: 'Electronics & Consumer',
+    title: 'Kitchenware: Stainless Cookware (IS 14756) vs Plugs (IS 1293)',
+    stdAQuery: 'IS 14756:2017',
+    stdBQuery: 'IS 1293:2019',
+    category: 'Consumer Goods',
+  },
+  {
+    title: 'Precious Metals: Gold (IS 1417) vs Silver (IS 2112)',
+    stdAQuery: 'IS 1417:2016',
+    stdBQuery: 'IS 2112:2014',
+    category: 'Precious Metals & Hallmarking',
   },
 ];
 
@@ -509,6 +515,118 @@ export default function Compare() {
                 })}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* ── Clause-by-Clause Technical Requirements Comparison ── */}
+      {comparisonResult?.clause_comparisons?.length > 0 && !comparing && (
+        <div className="card compare__table-card" style={{ marginTop: '20px' }}>
+          <div className="compare__table-header-title">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div>
+                <h3 className="text-base font-bold text-primary flex items-center gap-2">
+                  <FileCheck size={16} className="text-blue" />
+                  <span>Clause-by-Clause Technical Requirements Breakdown</span>
+                </h3>
+                <span className="text-xs text-muted">
+                  Extracted from authentic Bureau of Indian Standards (BIS) specifications
+                </span>
+              </div>
+              <span className="badge badge-blue text-xs">
+                {comparisonResult.clause_comparisons.length} Clauses Cross-Referenced
+              </span>
+            </div>
+          </div>
+
+          <div className="compare__table-wrap">
+            <table className="compare__table">
+              <thead>
+                <tr>
+                  <th style={{ width: '6%', textAlign: 'center' }}>#</th>
+                  <th style={{ width: '44%' }}>
+                    <div className="flex items-center gap-2">
+                      <span className="standards__std-number">{stdA?.number || 'Standard A'}</span>
+                      <span className="text-xs text-muted">Clause & Specification</span>
+                    </div>
+                  </th>
+                  <th style={{ width: '44%' }}>
+                    <div className="flex items-center gap-2">
+                      <span className="standards__std-number">{stdB?.number || 'Standard B'}</span>
+                      <span className="text-xs text-muted">Clause & Specification</span>
+                    </div>
+                  </th>
+                  <th style={{ width: '6%', textAlign: 'center' }}>Relation</th>
+                </tr>
+              </thead>
+              <tbody>
+                {comparisonResult.clause_comparisons.map((c) => (
+                  <tr key={c.index} className={c.differs ? 'compare__row--differs' : ''}>
+                    <td style={{ textAlign: 'center', fontSize: 'var(--text-xs)', color: 'var(--text-muted)' }}>
+                      {c.index}
+                    </td>
+                    <td className="compare__cell">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="standards__std-number text-xs">{c.clause_a}</span>
+                        {c.category_a && <span className="badge badge-indigo text-xs">{c.category_a}</span>}
+                      </div>
+                      <p className="text-xs text-secondary" style={{ margin: 0, lineHeight: 1.45 }}>{c.text_a}</p>
+                    </td>
+                    <td className="compare__cell">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="standards__std-number text-xs">{c.clause_b}</span>
+                        {c.category_b && <span className="badge badge-indigo text-xs">{c.category_b}</span>}
+                      </div>
+                      <p className="text-xs text-secondary" style={{ margin: 0, lineHeight: 1.45 }}>{c.text_b}</p>
+                    </td>
+                    <td style={{ textAlign: 'center' }}>
+                      <span className={`badge ${c.status === 'Distinct Requirement' ? 'badge-muted' : c.status === 'Matched Category' ? 'badge-blue' : 'badge-warning'} text-xs`}>
+                        {c.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* ── Official Source Citations & Limitations Card ── */}
+      {comparisonResult && !comparing && (
+        <div className="card" style={{ marginTop: '20px', background: 'rgba(30, 41, 59, 0.4)', border: '1px dashed rgba(255, 255, 255, 0.12)', padding: '16px' }}>
+          <div className="flex items-start gap-3">
+            <HelpCircle size={18} className="text-blue flex-shrink-0 mt-0.5" />
+            <div>
+              <h4 className="text-xs font-bold text-primary mb-1 uppercase tracking-wider">
+                Source Document Citations & Grounding Limitations
+              </h4>
+              <p className="text-xs text-muted mb-3" style={{ lineHeight: '1.5' }}>
+                {comparisonResult.limitations || (
+                  "Comparisons are grounded in authentic Bureau of Indian Standards (BIS) publications, Gazette notifications, and Manakonline specifications. Unmatched or distinct clauses denote differing application domains rather than functional equivalence."
+                )}
+              </p>
+              <div className="flex items-center gap-3 flex-wrap text-xs">
+                <a
+                  href="https://www.bis.gov.in"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="compliance__source-chip"
+                >
+                  <ExternalLink size={12} />
+                  <span>BIS Official Standards Directory (bis.gov.in)</span>
+                </a>
+                <a
+                  href="https://www.manakonline.in"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="compliance__source-chip"
+                >
+                  <ExternalLink size={12} />
+                  <span>BIS Manakonline e-Portal (manakonline.in)</span>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       )}

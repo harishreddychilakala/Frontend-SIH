@@ -623,3 +623,100 @@
   color: #0F172A;
 }
 
+/* Checklist Grid and Items */
+.compliance__checklist-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.compliance__checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.compliance__checklist-item:hover {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: rgba(59, 130, 246, 0.3);
+  transform: translateY(-1px);
+}
+
+.compliance__checklist-item--met {
+  background: rgba(16, 185, 129, 0.08);
+  border-color: rgba(16, 185, 129, 0.25);
+}
+
+.compliance__checklist-checkbox {
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.compliance__checkbox-empty {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--text-muted);
+  transition: border-color 0.2s ease;
+}
+
+.compliance__checklist-item:hover .compliance__checkbox-empty {
+  border-color: var(--blue-light);
+}
+
+/* Source Chips */
+.compliance__source-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.compliance__source-chip:hover {
+  background: rgba(37, 99, 235, 0.15);
+  border-color: rgba(37, 99, 235, 0.35);
+  color: var(--blue-light);
+}
+
+/* Disclaimer Card */
+.compliance__disclaimer-card {
+  background: rgba(30, 41, 59, 0.35);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  padding: 14px 18px;
+}
+
+[data-theme="light"] .compliance__checklist-item {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+}
+
+[data-theme="light"] .compliance__checklist-item--met {
+  background: #F0FDF4;
+  border-color: #86EFAC;
+}
+
+[data-theme="light"] .compliance__disclaimer-card {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+}
+
+[data-theme="light"] .compliance__source-chip {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  color: #334155;
+}
+

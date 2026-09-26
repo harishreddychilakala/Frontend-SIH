@@ -12,13 +12,31 @@ import './Compliance.css';
 
 const SAMPLE_PRESETS = [
   {
-    name: 'Electric Storage Water Heater',
+    name: 'Electric Ceiling Fan (1200mm)',
     category: 'Electrical Appliances',
-    standard: 'IS 2082 / IS 302-2-15',
+    standard: 'IS 374:2019',
     type: 'Domestic Manufacturer',
     market: 'Indian Domestic Market',
-    desc: 'Stationary electric storage water heater 15L-25L capacity with automatic thermostat, safety valve, and 8 bar pressure rating.',
-    tag: 'IS 2082',
+    desc: 'AC electric ceiling fan with 1200mm sweep, copper winding motor, regulator, secondary safety suspension wire, and 1-Star BEE rating.',
+    tag: 'IS 374',
+  },
+  {
+    name: 'Stainless Steel Utensils & Cookware',
+    category: 'Food Products',
+    standard: 'IS 14756 / IS 5522',
+    type: 'Domestic Manufacturer',
+    market: 'Indian Domestic Market',
+    desc: 'Food-grade stainless steel cookware (kadahi, saucepan, frying pan) with encapsulated aluminum base and insulated handles under mandatory QCO.',
+    tag: 'IS 14756',
+  },
+  {
+    name: 'Packaged Food / Wheat Flour (Maida)',
+    category: 'Food Products',
+    standard: 'IS 1009:1979',
+    type: 'Domestic Manufacturer',
+    market: 'Indian Domestic Market',
+    desc: 'Refined wheat flour (maida) milled for consumer bakery packaging adhering to moisture, gluten, total ash, and FSSAI hygienic packaging limits.',
+    tag: 'IS 1009',
   },
   {
     name: 'High Strength TMT Rebar (Fe 500D)',
@@ -30,22 +48,13 @@ const SAMPLE_PRESETS = [
     tag: 'IS 1786',
   },
   {
-    name: 'Two-Wheeler Protective Helmet',
-    category: 'Automotive & Safety',
-    standard: 'IS 4151',
+    name: 'Electric Storage Water Heater (25L)',
+    category: 'Electrical Appliances',
+    standard: 'IS 2082 / IS 302-2-15',
     type: 'Domestic Manufacturer',
     market: 'Indian Domestic Market',
-    desc: 'Full-face protective helmet for motorcycle riders with polycarbonate scratch-resistant visor and chin strap retention system <= 1.2kg.',
-    tag: 'IS 4151',
-  },
-  {
-    name: '5G Smartphone / Power Adapter',
-    category: 'Electronics & IT',
-    standard: 'IS 13252 (Part 1) / IS 16046',
-    type: 'Importer / Brand Owner',
-    market: 'Indian Domestic Market',
-    desc: 'Cellular mobile phone with built-in lithium-ion battery and 33W fast USB power adapter complying with MeitY CRS Scheme II.',
-    tag: 'IS 13252',
+    desc: 'Stationary electric storage water heater 25L capacity with automatic thermostat, safety valve, and 8 bar pressure rating.',
+    tag: 'IS 2082',
   },
 ];
 
@@ -73,11 +82,33 @@ export default function Compliance() {
   
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
+  const [userChecklist, setUserChecklist] = useState({});
   const [historyReports, setHistoryReports] = useState([]);
   const [loadingHistory, setLoadingHistory] = useState(false);
 
   const { addToast } = useApp();
   const navigate = useNavigate();
+
+  // Initialize interactive checklist state whenever a new result is loaded
+  useEffect(() => {
+    if (result && result.checklist) {
+      const initial = {};
+      result.checklist.forEach((item) => {
+        initial[item.id] = item.status === 'met';
+      });
+      setUserChecklist(initial);
+    }
+  }, [result]);
+
+  const toggleChecklistItem = (id) => {
+    setUserChecklist(prev => {
+      const updated = { ...prev, [id]: !prev[id] };
+      const total = result?.checklist?.length || 0;
+      const metCount = Object.values(updated).filter(Boolean).length;
+      addToast(`Self-Assessment updated: ${metCount}/${total} requirements indicated as met.`, 'info');
+      return updated;
+    });
+  };
 
   // Load past history reports
   const loadHistory = async () => {
@@ -135,6 +166,7 @@ export default function Compliance() {
 
   const resetForm = () => {
     setResult(null);
+    setUserChecklist({});
     setProductName('');
     setStandardRef('');
     setDescription('');
@@ -154,6 +186,10 @@ export default function Compliance() {
     }
     return <span className="badge badge-blue"><Shield size={12} /> Needs Verification</span>;
   };
+
+  const checklistItems = result?.checklist || [];
+  const metItemsCount = checklistItems.filter(item => userChecklist[item.id]).length;
+  const missingOrUnverifiedItems = checklistItems.filter(item => !userChecklist[item.id]);
 
   return (
     <div className="compliance animate-fade-in">
@@ -365,6 +401,146 @@ export default function Compliance() {
                     <span>{doc}</span>
                   </div>
                 ))}
+              </div>
+            </div>
+          </div>
+
+          {/* ── Interactive Compliance Self-Assessment Checklist ── */}
+          <div className="compliance__glass-card" style={{ marginTop: '20px' }}>
+            <div className="flex justify-between items-center mb-3 flex-wrap gap-2">
+              <div>
+                <h3 className="section-title flex items-center gap-2 mb-1">
+                  <CheckCircle size={17} className="text-blue" />
+                  <span>Interactive Standard Requirements Checklist</span>
+                </h3>
+                <p className="text-xs text-muted">
+                  Click items below to indicate internal readiness. Unchecked items are flagged for testing.
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold text-primary">
+                  Self-Assessment: <strong className="text-blue">{metItemsCount} / {checklistItems.length} Met</strong> ({checklistItems.length > 0 ? Math.round((metItemsCount / checklistItems.length) * 100) : 0}%)
+                </span>
+              </div>
+            </div>
+
+            {/* Live Progress Bar */}
+            <div className="progress-bar-wrap mb-4">
+              <div
+                className="progress-bar-fill"
+                style={{
+                  width: `${checklistItems.length > 0 ? (metItemsCount / checklistItems.length) * 100 : 0}%`,
+                  background: 'linear-gradient(90deg, #3B82F6, #10B981)',
+                  transition: 'width 0.3s ease'
+                }}
+              />
+            </div>
+
+            {checklistItems.length > 0 ? (
+              <div className="compliance__checklist-grid">
+                {checklistItems.map((item) => {
+                  const isMet = !!userChecklist[item.id];
+                  return (
+                    <div
+                      key={item.id}
+                      className={`compliance__checklist-item ${isMet ? 'compliance__checklist-item--met' : ''}`}
+                      onClick={() => toggleChecklistItem(item.id)}
+                      role="button"
+                      tabIndex={0}
+                    >
+                      <div className="compliance__checklist-checkbox">
+                        {isMet ? <CheckCircle size={18} className="text-success" /> : <div className="compliance__checkbox-empty" />}
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1 flex-wrap">
+                          {item.clause && <span className="standards__std-number text-xs">{item.clause}</span>}
+                          <span className="badge badge-indigo text-xs">{item.category}</span>
+                          {item.mandatory && <span className="badge badge-warning text-xs">Mandatory</span>}
+                          <span className={`badge ${isMet ? 'badge-success' : 'badge-muted'} text-xs ml-auto`}>
+                            {isMet ? 'Requirement Met' : 'Pending / Verification Needed'}
+                          </span>
+                        </div>
+                        <p className="text-sm text-primary font-medium" style={{ margin: 0, lineHeight: 1.4 }}>
+                          {item.text}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="text-xs text-muted">No granular clauses retrieved for this product specification.</p>
+            )}
+          </div>
+
+          {/* ── Missing or Unverified Requirements Analysis ── */}
+          {missingOrUnverifiedItems.length > 0 && (
+            <div className="compliance__glass-card" style={{ marginTop: '20px', borderLeft: '3px solid var(--warning)' }}>
+              <h3 className="section-title mb-2 flex items-center gap-2 text-warning">
+                <AlertTriangle size={17} />
+                <span>Pending & Unverified Requirements ({missingOrUnverifiedItems.length})</span>
+              </h3>
+              <p className="text-xs text-secondary mb-3">
+                The following technical specifications are not yet verified in your in-house setup. Prioritize these for third-party lab testing and factory calibration before applying on Manakonline.
+              </p>
+              <div className="flex flex-col gap-2">
+                {missingOrUnverifiedItems.map((item) => (
+                  <div key={item.id} className="compliance__history-item" style={{ background: 'rgba(234, 179, 8, 0.05)', borderColor: 'rgba(234, 179, 8, 0.2)' }}>
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="standards__std-number text-xs">{item.clause || 'Clause Ref'}</span>
+                        <span className="badge badge-warning text-xs">Action Required</span>
+                      </div>
+                      <span className="text-xs text-primary font-medium">{item.text}</span>
+                    </div>
+                    <button
+                      className="btn btn-secondary btn-sm"
+                      onClick={() => navigate('/laboratories')}
+                    >
+                      Find Test Lab
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ── Official Sources & Traceability ── */}
+          {result.sources?.length > 0 && (
+            <div className="compliance__glass-card" style={{ marginTop: '20px' }}>
+              <h3 className="section-title mb-2 flex items-center gap-2">
+                <Globe size={16} className="text-blue" /> Authentic Source Documents & Gazette Links
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {result.sources.map((src, idx) => (
+                  <a
+                    key={idx}
+                    href={src.url || 'https://www.bis.gov.in'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="compliance__source-chip"
+                  >
+                    <ExternalLink size={12} className="text-blue" />
+                    <span>{src.title}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ── Statutory Legal Disclaimer ── */}
+          <div className="compliance__glass-card compliance__disclaimer-card" style={{ marginTop: '20px' }}>
+            <div className="flex items-start gap-3">
+              <HelpCircle size={20} className="text-blue flex-shrink-0 mt-0.5" />
+              <div>
+                <h4 className="text-xs font-bold text-primary mb-1 uppercase tracking-wider">
+                  Official Compliance Assistance Notice & Legal Disclaimer
+                </h4>
+                <p className="text-xs text-muted" style={{ lineHeight: '1.6' }}>
+                  {result.legal_disclaimer || (
+                    "This compliance evaluation is an AI-assisted self-assessment preparation tool designed to help manufacturers, importers, and SMEs navigate Indian Standards (IS) and Quality Control Orders. It does NOT constitute official Bureau of Indian Standards certification or grant of licence. Official certification requires accredited laboratory testing and factory audit by BIS officers via manakonline.in."
+                  )}
+                </p>
               </div>
             </div>
           </div>
