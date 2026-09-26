@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Search, MapPin, FlaskConical, CheckCircle, Shield,
   Phone, Mail, Sparkles, ArrowRight, ExternalLink, Building, Layers
@@ -10,28 +10,53 @@ import './Laboratories.css';
 const QUICK_TESTING_CHIPS = [
   'All Types',
   'Electrical',
+  'Fans & Ventilation',
   'Mechanical',
   'Chemical',
+  'Cookware & Utensils',
   'Electronics',
   'Civil',
   'Food & Beverages',
 ];
 
+const ACCREDITATION_OPTIONS = [
+  'All Accreditations',
+  'BIS Central Laboratory',
+  'BIS Regional Laboratory',
+  'BIS Recognized Laboratory',
+  'NABL Accredited Testing Facility',
+];
+
 export default function Laboratories() {
-  const [labs, setLabs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [query, setQuery] = useState('');
-  const [state, setState] = useState('All States');
-  const [testingType, setTestingType] = useState('All Types');
+  const location = useLocation();
   const navigate = useNavigate();
 
-  const search = async (searchQuery = query, searchState = state, searchType = testingType) => {
+  // Read initial params from URL if navigated from Compliance / Standards
+  const urlParams = new URLSearchParams(location.search);
+  const initialQuery = urlParams.get('q') || urlParams.get('query') || urlParams.get('standard') || '';
+  const initialType = urlParams.get('type') || 'All Types';
+  const initialState = urlParams.get('state') || 'All States';
+
+  const [labs, setLabs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [query, setQuery] = useState(initialQuery);
+  const [state, setState] = useState(initialState);
+  const [testingType, setTestingType] = useState(initialType);
+  const [accreditation, setAccreditation] = useState('All Accreditations');
+
+  const search = async (
+    searchQuery = query,
+    searchState = state,
+    searchType = testingType,
+    searchAccreditation = accreditation
+  ) => {
     setLoading(true);
     try {
       const results = await laboratoryService.searchLaboratories({
         query: searchQuery,
         state: searchState,
         testingType: searchType,
+        accreditation: searchAccreditation,
       });
       setLabs(results || []);
     } catch (err) {
@@ -42,8 +67,8 @@ export default function Laboratories() {
   };
 
   useEffect(() => {
-    search(query, state, testingType);
-  }, [state, testingType]);
+    search(query, state, testingType, accreditation);
+  }, [state, testingType, accreditation]);
 
   const handleSearchSubmit = (e) => {
     if (e) e.preventDefault();
@@ -123,6 +148,15 @@ export default function Laboratories() {
               {labTestingTypes.map(t => <option key={t}>{t}</option>)}
             </select>
 
+            <select
+              className="form-input form-select labs__select"
+              value={accreditation}
+              onChange={e => setAccreditation(e.target.value)}
+              aria-label="Filter by Accreditation"
+            >
+              {ACCREDITATION_OPTIONS.map(a => <option key={a}>{a}</option>)}
+            </select>
+
             <button type="submit" className="btn btn-primary labs__search-btn" id="labs-search-btn">
               Search
             </button>
@@ -166,12 +200,12 @@ export default function Laboratories() {
         ) : labs.length === 0 ? (
           <div className="empty-state" style={{ gridColumn: '1 / -1' }}>
             <FlaskConical className="empty-state-icon" />
-            <p className="empty-state-title">No testing laboratories found for &quot;{query}&quot;</p>
-            <p className="empty-state-description">Try adjusting your location filter or search terms.</p>
+            <p className="empty-state-title">No testing laboratories found for &quot;{query || state || testingType}&quot;</p>
+            <p className="empty-state-description">Try adjusting your category, location filter, or standard number.</p>
             <button
               className="btn btn-primary"
               style={{ marginTop: '14px' }}
-              onClick={() => { setQuery(''); setState('All States'); setTestingType('All Types'); search('', 'All States', 'All Types'); }}
+              onClick={() => { setQuery(''); setState('All States'); setTestingType('All Types'); setAccreditation('All Accreditations'); search('', 'All States', 'All Types', 'All Accreditations'); }}
             >
               Reset Filters
             </button>
@@ -181,9 +215,11 @@ export default function Laboratories() {
             <div key={lab.id} className="lab-card card animate-fade-in">
               <div className="lab-card__header">
                 <div className="lab-card__header-badges">
-                  <span className="badge badge-indigo text-xs">{lab.type}</span>
+                  <span className={`badge ${lab.type?.includes('Central') ? 'badge-blue' : lab.type?.includes('Regional') ? 'badge-indigo' : 'badge-cyan'} text-xs`}>
+                    {lab.type}
+                  </span>
                   <div className="verified-badge">
-                    <CheckCircle size={10} /> Verified NABL / BIS
+                    <CheckCircle size={10} /> {lab.verification_status === 'verified' ? 'Verified Accreditation' : 'Unverified Scope'}
                   </div>
                 </div>
                 <h3 className="lab-card__name">{lab.name}</h3>
@@ -226,7 +262,7 @@ export default function Laboratories() {
                 </div>
 
                 <div className="lab-card__section">
-                  <div className="section-label mb-1">Accreditation Status</div>
+                  <div className="section-label mb-1">Accreditation & Recognition</div>
                   <p className="text-xs text-secondary" style={{ lineHeight: '1.4' }}>{lab.accreditation}</p>
                 </div>
               </div>
@@ -239,14 +275,25 @@ export default function Laboratories() {
                   </div>
                 )}
 
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap">
                   <button
                     type="button"
-                    className="btn btn-secondary btn-sm w-full"
-                    onClick={() => navigate(`/assistant?q=${encodeURIComponent(`What tests can be performed at ${lab.name} and how do I submit test samples?`)}`)}
+                    className="btn btn-secondary btn-sm flex-1"
+                    onClick={() => navigate(`/assistant?q=${encodeURIComponent(`What tests can be performed at ${lab.name} for ${lab.standards ? lab.standards.join(', ') : 'Indian Standards'} and how do I submit test samples?`)}`)}
                   >
-                    <Sparkles size={12} /> Ask AI About Testing
+                    <Sparkles size={12} /> Ask AI About Lab
                   </button>
+                  {lab.source_url && (
+                    <a
+                      href={lab.source_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-ghost btn-sm"
+                      title="Official Laboratory Portal"
+                    >
+                      <ExternalLink size={13} />
+                    </a>
+                  )}
                 </div>
               </div>
             </div>

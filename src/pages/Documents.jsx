@@ -37,6 +37,8 @@ export default function Documents() {
     if (!f) return;
     setFile(f);
 
+    const isPdf = f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf');
+
     // Create image preview if file is an image
     if (f.type.startsWith('image/')) {
       const reader = new FileReader();
@@ -47,19 +49,41 @@ export default function Documents() {
     }
 
     setStage('uploading');
-    addToast('Uploading image / document to BIS Vision AI...', 'info');
+    addToast(isPdf ? 'Uploading PDF for semantic text extraction & vector indexing...' : 'Uploading image to BIS Vision AI...', 'info');
 
     try {
-      setTimeout(() => setStage('analyzing'), 600);
+      setTimeout(() => setStage('extracting'), 600);
+      setTimeout(() => setStage('indexing'), 1400);
+
       const analysis = await documentService.analyzeDocument(f);
       setResult(analysis);
       setStage('done');
-      addToast('Product successfully identified & analyzed by BIS AI', 'success');
+      addToast(isPdf ? 'PDF text extracted & indexed into pgvector for Q&A' : 'Product successfully identified & analyzed by BIS AI', 'success');
       loadPastDocs();
     } catch (err) {
-      addToast(err.message || 'Analysis failed. Please try again.', 'error');
+      addToast(err.message || 'Processing failed. Please upload a valid document.', 'error');
       setStage('idle');
     }
+  };
+
+  const handleDeleteDoc = async (id, e) => {
+    if (e) e.stopPropagation();
+    try {
+      await documentService.deleteDocument(id);
+      addToast('Document and vector chunks removed', 'info');
+      loadPastDocs();
+      if (result && result.id === id) {
+        reset();
+      }
+    } catch (err) {
+      addToast('Failed to delete document', 'error');
+    }
+  };
+
+  const handleSelectPastDoc = (doc) => {
+    setResult(doc.analysis_result || { filename: doc.filename, summary: 'Uploaded document record' });
+    setFile({ name: doc.filename });
+    setStage('done');
   };
 
   const handleDrop = (e) => {
@@ -76,8 +100,8 @@ export default function Documents() {
     setResult(null);
   };
 
-  const productName = result?.product_name || result?.applicable_standard?.title || file?.name || 'Identified Product';
-  const category = result?.category || 'General Product';
+  const productName = result?.product_name || result?.applicable_standard?.title || file?.name || 'Processed Document';
+  const category = result?.category || 'Technical Document';
   const applicableStd = result?.applicable_standard;
   const qco = result?.qco_mandate;
   const certScheme = result?.certification_scheme;
@@ -85,14 +109,18 @@ export default function Documents() {
   const extractedRequirements = result?.extracted_requirements || result?.extractedRequirements || [];
   const testingClauses = result?.testing_clauses || [];
   const complianceGaps = result?.compliance_gaps || result?.complianceGaps || [];
-  const referencedStandards = result?.referenced_standards || result?.referencedStandards || [];
   const authLabs = result?.authorized_laboratories || [];
   const uploadTime = result?.uploaded_at || result?.uploadedAt || new Date().toISOString();
   const fileSize = result?.file_size || result?.fileSize || '1.8 MB';
+  const pageCount = result?.page_count;
+  const chunksIndexed = result?.chunks_indexed;
+  const isRagIndexed = result?.rag_indexed;
 
   const handleAskInChat = () => {
-    const stdRef = applicableStd?.number || '';
-    const query = `Explain the mandatory BIS certification process, testing requirements, and QCO order for ${productName} (${stdRef})`;
+    const docName = result?.filename || file?.name || 'document';
+    const query = isRagIndexed
+      ? `Based on the uploaded document '${docName}', what are the primary technical requirements, testing clauses, and compliance standards?`
+      : `Explain the mandatory BIS certification process, testing requirements, and QCO order for ${productName}`;
     navigate(`/assistant?q=${encodeURIComponent(query)}`);
   };
 
@@ -102,15 +130,15 @@ export default function Documents() {
         <div className="flex justify-between items-start flex-wrap gap-3">
           <div>
             <h1 className="page-title flex items-center gap-2">
-              <Camera size={26} className="text-gradient-ai" /> Photo Product Identification &amp; Analysis
+              <FileText size={26} className="text-gradient-ai" /> Document Processing &amp; Product Analysis
             </h1>
             <p className="page-subtitle">
-              Upload a photo of any product, nameplate, or specification sheet. Vision AI automatically identifies the product and its mandatory BIS standards.
+              Upload PDF technical specifications, test reports, or product photos. AI extracts clauses, indexes vector embeddings, and enables grounded Q&amp;A retrieval.
             </p>
           </div>
           <div className="badge badge-blue" style={{ width: 'fit-content' }}>
             <Shield size={12} />
-            Gemini Multimodal Vision + BIS RAG
+            PDF RAG Vector Indexing + Gemini Vision AI
           </div>
         </div>
       </div>
@@ -131,24 +159,24 @@ export default function Documents() {
           <input 
             ref={fileRef} 
             type="file" 
-            accept=".png,.jpg,.jpeg,.webp,.pdf,.docx,.doc" 
+            accept=".pdf,.png,.jpg,.jpeg,.webp,.docx,.doc" 
             hidden 
             onChange={e => handleFile(e.target.files[0])} 
           />
           <div className="documents__drop-icon-wrap">
             <Upload size={36} className="documents__drop-icon" />
           </div>
-          <h3>Snap or drop a product photo here</h3>
-          <p>or click to browse product photos &amp; specifications</p>
+          <h3>Snap a product photo or drop a PDF document</h3>
+          <p>Click to browse technical specifications, test reports, or appliance nameplates</p>
           <div className="documents__file-types">
-            <span className="badge badge-blue">📷 Photos (JPG, PNG, WEBP)</span>
-            <span className="badge badge-muted">📄 PDFs &amp; Specs</span>
+            <span className="badge badge-blue">📄 PDFs &amp; Standards (Full RAG Indexing)</span>
+            <span className="badge badge-indigo">📷 Product Photos (Vision AI)</span>
           </div>
-          <p className="documents__drop-limit">Supports physical appliances, equipment nameplates, helmets, steel, chargers, toys, etc.</p>
+          <p className="documents__drop-limit">Supports technical standards, lab reports, equipment specifications, ceiling fans, steel rebars, electronics, etc.</p>
         </div>
       )}
 
-      {(stage === 'uploading' || stage === 'analyzing') && (
+      {(stage === 'uploading' || stage === 'extracting' || stage === 'indexing' || stage === 'analyzing') && (
         <div className="documents__progress card animate-fade-in">
           {previewUrl ? (
             <div className="documents__preview-thumbnail">
@@ -157,15 +185,26 @@ export default function Documents() {
           ) : (
             <div className="compliance__loading-orb"><div className="compliance__spinner" /></div>
           )}
-          <h3>{stage === 'uploading' ? 'Uploading product photo...' : 'Vision AI is identifying product & BIS standards...'}</h3>
+          <h3>
+            {stage === 'uploading' && 'Uploading document to server...'}
+            {stage === 'extracting' && 'Extracting text and preserving page boundaries...'}
+            {stage === 'indexing' && 'Generating vector embeddings & indexing into pgvector...'}
+            {stage === 'analyzing' && 'Analyzing compliance parameters with BIS AI...'}
+          </h3>
           <p className="text-secondary">{file?.name}</p>
           <div className="progress-bar" style={{ width: '320px', margin: '14px 0' }}>
-            <div className="progress-fill" style={{ width: stage === 'uploading' ? '40%' : '90%', transition: 'width 1.5s ease' }} />
+            <div
+              className="progress-fill"
+              style={{
+                width: stage === 'uploading' ? '30%' : stage === 'extracting' ? '60%' : stage === 'indexing' ? '85%' : '95%',
+                transition: 'width 0.8s ease'
+              }}
+            />
           </div>
           <p className="text-muted text-xs">
-            {stage === 'analyzing' 
-              ? 'Analyzing visual features, inspecting markings, and querying BIS pgvector database…' 
-              : 'Please wait…'}
+            {stage === 'indexing'
+              ? 'Splitting text into overlapping semantic chunks and embedding with Gemini 768-dim model…'
+              : 'Processing document structure and extracting technical clauses…'}
           </p>
         </div>
       )}
@@ -182,7 +221,12 @@ export default function Documents() {
               )}
               <div>
                 <div className="font-semibold text-base">{result.filename || file?.name}</div>
-                <div className="text-muted text-xs">{fileSize} · Analyzed {new Date(uploadTime).toLocaleString('en-IN')}</div>
+                <div className="text-muted text-xs">
+                  {fileSize}
+                  {pageCount && ` · ${pageCount} Pages`}
+                  {chunksIndexed && ` · ${chunksIndexed} Vector Chunks Indexed`}
+                  {` · Analyzed ${new Date(uploadTime).toLocaleString('en-IN')}`}
+                </div>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -190,15 +234,15 @@ export default function Documents() {
                 <MessageSquare size={14} /> Ask BIS-AI in Chat
               </button>
               <button className="btn btn-ghost btn-sm" onClick={reset}>
-                <X size={14} /> Analyze Another
+                <X size={14} /> Upload Another
               </button>
             </div>
           </div>
 
-          {/* Hero: AI Identified Product Card */}
+          {/* Hero: AI Identified Product / Document Card */}
           <div className="documents__hero-card card">
             <div className="documents__hero-badge">
-              <Sparkles size={14} /> Vision AI Identification
+              <Sparkles size={14} /> {isRagIndexed ? 'RAG Vector Indexed Document' : 'Vision AI Analysis'}
             </div>
             <div className="documents__hero-body">
               <div className="documents__hero-info">
@@ -223,8 +267,8 @@ export default function Documents() {
               {applicableStd && (
                 <div className="documents__hero-standard card">
                   <span className="section-label">Applicable Indian Standard</span>
-                  <div className="documents__std-highlight">{applicableStd.number}</div>
-                  <div className="documents__std-title">{applicableStd.title}</div>
+                  <div className="documents__std-highlight">{applicableStd.number || 'IS Specification'}</div>
+                  <div className="documents__std-title">{applicableStd.title || 'Standard Title'}</div>
                   <div className="verified-badge" style={{ marginTop: 8 }}>
                     <Shield size={11} /> {applicableStd.status || 'Active Indian Standard'}
                   </div>
@@ -246,11 +290,6 @@ export default function Documents() {
                   </div>
                   <div className="font-semibold text-sm">{qco.qco_order_name || 'BIS Statutory Notification'}</div>
                   <p className="text-secondary text-xs" style={{ marginTop: 4 }}>{qco.effective_status}</p>
-                  {qco.penalties && (
-                    <p className="text-muted text-xs" style={{ marginTop: 6, fontStyle: 'italic' }}>
-                      ⚠️ {qco.penalties}
-                    </p>
-                  )}
                 </div>
 
                 {certScheme && (
@@ -273,10 +312,10 @@ export default function Documents() {
                   {testingClauses.map((t, i) => (
                     <div key={i} className="documents__test-item">
                       <div className="flex justify-between items-center gap-2">
-                        <span className="font-medium text-sm">{t.test_name}</span>
+                        <span className="font-medium text-sm">{t.test_name || t}</span>
                         {t.clause && <span className="badge badge-muted text-xs">{t.clause}</span>}
                       </div>
-                      <p className="text-muted text-xs" style={{ marginTop: 3 }}>{t.description}</p>
+                      {t.description && <p className="text-muted text-xs" style={{ marginTop: 3 }}>{t.description}</p>}
                     </div>
                   ))}
                 </div>
@@ -284,49 +323,90 @@ export default function Documents() {
             )}
 
             {/* Extracted Requirements */}
-            <div className="card">
-              <h3 className="documents__section-title flex items-center gap-2">
-                <CheckCircle2 size={16} className="text-green" /> Key Technical Requirements
-              </h3>
-              <div className="documents__req-list">
-                {extractedRequirements.map((req, i) => (
-                  <div key={i} className="documents__req-item">
-                    <span className="badge badge-indigo">{req.category || 'Specification'}</span>
-                    <span className="text-sm">{req.text}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Compliance Gaps & Action Items */}
-            <div className="card">
-              <h3 className="documents__section-title flex items-center gap-2">
-                <AlertTriangle size={16} className="text-amber" /> Compliance Gaps &amp; Verification
-              </h3>
-              <div className="documents__gap-list">
-                {complianceGaps.map((gap, i) => (
-                  <div key={i} className={`documents__gap-item documents__gap-item--${gap.severity || 'medium'}`}>
-                    <AlertTriangle size={14} />
-                    <span className="text-sm">{gap.issue}</span>
-                    <span className="badge badge-muted" style={{ marginLeft: 'auto' }}>{gap.severity}</span>
-                  </div>
-                ))}
-              </div>
-
-              {authLabs.length > 0 && (
-                <div style={{ marginTop: 14, borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 10 }}>
-                  <span className="text-xs text-muted font-medium">Authorized Test Facilities:</span>
-                  <ul className="documents__labs-list">
-                    {authLabs.map((lab, i) => (
-                      <li key={i} className="text-xs text-secondary">{lab}</li>
-                    ))}
-                  </ul>
+            {extractedRequirements.length > 0 && (
+              <div className="card">
+                <h3 className="documents__section-title flex items-center gap-2">
+                  <CheckCircle2 size={16} className="text-green" /> Key Technical Requirements
+                </h3>
+                <div className="documents__req-list">
+                  {extractedRequirements.map((req, i) => (
+                    <div key={i} className="documents__req-item">
+                      <span className="badge badge-indigo">{req.category || 'Specification'}</span>
+                      <span className="text-sm">{req.text || req}</span>
+                    </div>
+                  ))}
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
       )}
+
+      {/* ── Uploaded Documents Library Section ── */}
+      <div className="card" style={{ marginTop: '24px' }}>
+        <div className="flex justify-between items-center mb-3 flex-wrap gap-2">
+          <div>
+            <h3 className="text-base font-bold text-primary flex items-center gap-2">
+              <Layers size={17} className="text-blue" />
+              <span>Processed Documents Library ({pastDocs.length})</span>
+            </h3>
+            <p className="text-xs text-muted">
+              All indexed PDFs and photo analyses stored with user isolation. Click &apos;Ask in Chat&apos; to query with grounded RAG.
+            </p>
+          </div>
+        </div>
+
+        {pastDocs.length === 0 ? (
+          <div className="empty-state" style={{ padding: '24px 12px' }}>
+            <FileText size={28} className="empty-state-icon" style={{ margin: '0 auto 8px', color: 'var(--text-muted)' }} />
+            <p className="empty-state-title" style={{ fontSize: 'var(--text-sm)' }}>No documents uploaded yet</p>
+            <p className="empty-state-description" style={{ fontSize: 'var(--text-xs)' }}>
+              Upload your first PDF technical document or product photo above to enable AI analysis and RAG search.
+            </p>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {pastDocs.map((d) => (
+              <div
+                key={d.id}
+                className="compliance__history-item"
+                style={{ cursor: 'pointer' }}
+                onClick={() => handleSelectPastDoc(d)}
+              >
+                <div>
+                  <div className="flex items-center gap-2 mb-1 flex-wrap">
+                    <span className="font-semibold text-sm text-primary">{d.filename}</span>
+                    <span className="badge badge-blue text-xs">{d.file_type?.includes('pdf') ? 'PDF Document' : 'Photo Image'}</span>
+                    <span className="badge badge-success text-xs">Indexed for RAG</span>
+                  </div>
+                  <div className="text-xs text-muted">
+                    Uploaded: {new Date(d.created_at).toLocaleDateString('en-IN')} · Status: {d.analysis_status}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    className="btn btn-secondary btn-sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/assistant?q=${encodeURIComponent(`According to my uploaded document '${d.filename}', what are the key requirements and test parameters?`)}`);
+                    }}
+                  >
+                    <MessageSquare size={13} /> Ask in Chat
+                  </button>
+                  <button
+                    className="btn btn-ghost btn-sm text-error"
+                    onClick={(e) => handleDeleteDoc(d.id, e)}
+                    title="Delete document and vector chunks"
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
